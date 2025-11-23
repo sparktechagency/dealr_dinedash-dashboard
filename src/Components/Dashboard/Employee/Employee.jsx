@@ -80,7 +80,7 @@ const Employee = () => {
             ? record?.categories?.map((cat, idx) => (
                 <span
                   key={cat ?? idx}
-                  className="capitalize bg-[#185DDE]/10 rounded px-2 py-1"
+                  className="capitalize text-sm bg-[#185DDE]/10 rounded px-2 py-1 mr-1"
                 >
                   {cat}{" "}
                 </span>
@@ -190,6 +190,7 @@ const Employee = () => {
       <DeleteEmployee
         deleteEmployeeModal={deleteEmployeeModalOpen}
         handleCancel={handleCancel}
+        currentRecord={currentRecord}
       />
 
       <ViewEmployee

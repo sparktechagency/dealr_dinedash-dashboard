@@ -7,74 +7,21 @@ import PageWrapper from "../../UI/PageWrapper";
 import DeleteCity from "./DeleteCity";
 import AddCity from "./AddCity";
 import EditCity from "./EditCity";
-
-const dataSource = [
-  {
-    key: "1",
-    "S.ID": 1,
-    name: "Dhaka",
-    count: 120,
-  },
-  {
-    key: "2",
-    "S.ID": 2,
-    name: "Chattogram",
-    count: 95,
-  },
-  {
-    key: "3",
-    "S.ID": 3,
-    name: "Khulna",
-    count: 72,
-  },
-  {
-    key: "4",
-    "S.ID": 4,
-    name: "Rajshahi",
-    count: 64,
-  },
-  {
-    key: "5",
-    "S.ID": 5,
-    name: "Sylhet",
-    count: 58,
-  },
-  {
-    key: "6",
-    "S.ID": 6,
-    name: "Barisal",
-    count: 40,
-  },
-  {
-    key: "7",
-    "S.ID": 7,
-    name: "Rangpur",
-    count: 49,
-  },
-  {
-    key: "8",
-    "S.ID": 8,
-    name: "Mymensingh",
-    count: 53,
-  },
-  {
-    key: "9",
-    "S.ID": 9,
-    name: "Comilla",
-    count: 68,
-  },
-  {
-    key: "10",
-    "S.ID": 10,
-    name: "Narayanganj",
-    count: 77,
-  },
-];
+import { useGetCityQuery } from "../../../Redux/api/city/cityApi";
 
 const City = () => {
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const { data, isFetching } = useGetCityQuery({ page, limit });
+
+  const allCities = data?.data?.attributes?.results || [];
+  const totalCities = data?.data?.attributes?.pagination?.totalResults || 0;
+
   const [addCityModal, setAddCityModal] = useState(false);
   const [editCityModal, setEditCityModal] = useState(false);
   const [deleteCityModal, setDeleteCityModal] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null);
 
   const handleCancel = () => {
     setAddCityModal(false);
@@ -85,21 +32,29 @@ const City = () => {
   const columns = [
     {
       title: "S.ID",
-      dataIndex: "S.ID",
-      key: "S.ID",
+      dataIndex: "_id",
+      key: "_id",
       responsive: ["md"],
+      render: (_, __, index) => page * limit - limit + index + 1,
       align: "center",
     },
     {
       title: "City Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "cityName",
+      key: "cityName",
+      align: "center",
+    },
+    {
+      title: "Postal Code",
+      dataIndex: "postalCode",
+      key: "postalCode",
+      render: (postalCode) => postalCode?.join(", "),
       align: "center",
     },
     {
       title: "User Count",
-      dataIndex: "count",
-      key: "count",
+      dataIndex: "userCount",
+      key: "userCount",
       align: "center",
     },
 
@@ -118,7 +73,10 @@ const City = () => {
                 marginRight: 16,
                 cursor: "pointer",
               }}
-              onClick={() => setDeleteCityModal(true)}
+              onClick={() => {
+                setCurrentRecord(record);
+                setDeleteCityModal(true);
+              }}
             />
           </Tooltip>
 
@@ -130,7 +88,10 @@ const City = () => {
                 marginRight: 16,
                 cursor: "pointer",
               }}
-              onClick={() => setEditCityModal(true)}
+              onClick={() => {
+                setCurrentRecord(record);
+                setEditCityModal(true);
+              }}
             />
           </Tooltip>
         </div>
@@ -153,28 +114,34 @@ const City = () => {
       <div>
         <Table
           columns={columns}
-          dataSource={dataSource}
-          loading={false}
+          dataSource={allCities}
+          loading={isFetching}
           pagination={false}
-          rowKey="id"
+          rowKey="_id"
           scroll={{ x: true }}
         />
       </div>
 
       <div className="my-6">
         <Pagination
-          //   onChange={(value) => setCurrentPage(value)}
-          pageSize={10}
-          total={50}
+          current={page}
+          onChange={(page) => setPage(page)}
+          total={totalCities}
+          pageSize={limit}
           className="flex justify-end "
         />
       </div>
 
       <AddCity addCityModal={addCityModal} handleCancel={handleCancel} />
-      <EditCity editCityModal={editCityModal} handleCancel={handleCancel} />
+      <EditCity
+        editCityModal={editCityModal}
+        handleCancel={handleCancel}
+        currentRecord={currentRecord}
+      />
       <DeleteCity
         deleteCityModal={deleteCityModal}
         handleCancel={handleCancel}
+        currentRecord={currentRecord}
       />
     </PageWrapper>
   );

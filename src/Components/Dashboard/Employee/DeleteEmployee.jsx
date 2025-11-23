@@ -1,7 +1,28 @@
 /* eslint-disable react/prop-types */
 import { Modal } from "antd";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useDeleteAdminMutation } from "../../../Redux/api/employee/employeeApi";
 
-const DeleteEmployee = ({ deleteEmployeeModal, handleCancel }) => {
+const DeleteEmployee = ({
+  deleteEmployeeModal,
+  handleCancel,
+  currentRecord,
+}) => {
+  const [deleteAdmin] = useDeleteAdminMutation();
+
+  const handleDelete = async () => {
+    // Implement delete logic here, possibly using currentRecord._id
+    console.log(currentRecord);
+    const res = await tryCatchWrapper(
+      deleteAdmin,
+      { params: currentRecord?.employeeId },
+      "Deleting Employee..."
+    );
+
+    if (res?.statusCode === 201) {
+      handleCancel();
+    }
+  };
   return (
     <Modal
       open={deleteEmployeeModal}
@@ -11,7 +32,7 @@ const DeleteEmployee = ({ deleteEmployeeModal, handleCancel }) => {
     >
       <div className="mt-8">
         <p className="text-2xl font-medium text-center">
-          Do you want to block this Customer?
+          Do you want to Delete this Employee?
         </p>
         <div className="flex gap-10 px-8 mt-6">
           {/* Cancel Button */}
@@ -23,8 +44,11 @@ const DeleteEmployee = ({ deleteEmployeeModal, handleCancel }) => {
           </button>
 
           {/* Yes Button */}
-          <button className="px-5 h-11 w-full rounded-xl bg-[#CE0000] text-white hover:bg-[#CE0000]">
-            Block
+          <button
+            onClick={handleDelete}
+            className="px-5 h-11 w-full rounded-xl bg-[#CE0000] text-white hover:bg-[#CE0000]"
+          >
+            Delete
           </button>
         </div>
       </div>

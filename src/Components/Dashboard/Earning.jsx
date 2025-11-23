@@ -1,28 +1,27 @@
 import { useState } from "react";
 import { LuArrowLeftRight } from "react-icons/lu";
-import {
-  useGetAllEarningQuery,
-  useGetPaymentListQuery,
-} from "../../Redux/api/payment/paymentApi";
 import EarningTable from "../Tables/EarningTable";
 import ViewEarningModal from "../UI/ViewEarningModal";
 import { Pagination } from "antd";
+import { useGetTransactionQuery } from "../../Redux/api/transaction/transactionApi.js";
 
 export default function Earning() {
   //* It's Use to Show Modal
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
-  const { data: earning } = useGetAllEarningQuery({});
-  //* It's Use to Set Seclected User to delete and view
-  const [currentRecord, setCurrentRecord] = useState(null);
-  const { data: paymentData, isLoading } = useGetPaymentListQuery([
-    { name: "limit", value: pageSize },
-    { name: "page", value: currentPage },
-  ]);
 
-  const todaysEarning = 0;
-  const earnings = paymentData?.data?.result;
+  const { data, isLoading } = useGetTransactionQuery({
+    page: currentPage,
+    limit: pageSize,
+  });
+
+  const allEarnings = data?.data?.attributes?.transactions || [];
+  const totalEarnings = data?.data?.attributes?.pagination?.totalResults || 0;
+
+  const totalAllEarnings = data?.data?.attributes?.totalEarnings || 0;
+  const todaysEarnings = data?.data?.attributes?.todaysEarnings || 0;
 
   const showViewModal = (record) => {
     setCurrentRecord(record);
@@ -46,19 +45,21 @@ export default function Earning() {
               <div className="flex items-center justify-center gap-3 bg-[#185DDE] text-primary-color py-3 lg:w-[300px] rounded-xl">
                 <LuArrowLeftRight className="text-xl" />
                 <h1 className="text-lg">Today’s Earning</h1>
-                <h1>${todaysEarning?.data?.attributes || 0}</h1>
+                <h1>${todaysEarnings || 0}</h1>
               </div>
               <div className="flex items-center justify-center gap-3 bg-[#185DDE] text-primary-color py-3 lg:w-[300px] rounded-xl">
                 <LuArrowLeftRight className="text-xl" />
                 <h1 className="text-lg">All Earning</h1>
-                <h1>${earning?.data?.attributes || 0}</h1>
+                <h1>${totalAllEarnings || 0}</h1>
               </div>
             </div>
           </div>
         </div>
         <div className="px-2 lg:px-6">
           <EarningTable
-            data={earnings}
+            page={currentPage}
+            limit={pageSize}
+            data={allEarnings}
             loading={isLoading}
             showViewModal={showViewModal}
           />
@@ -66,8 +67,9 @@ export default function Earning() {
           <div className="py-6 flex items-center justify-end">
             <Pagination
               onChange={(value) => setCurrentPage(value)}
-              pageSize={paymentData?.data?.meta?.limit}
-              total={paymentData?.data?.meta?.total}
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalEarnings}
               showSizeChanger={false}
             />
           </div>

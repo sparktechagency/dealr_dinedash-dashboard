@@ -32,13 +32,13 @@ const employeeApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.employee],
     }),
-    // deleteAdmin: build.mutation({
-    //   query: (req) => ({
-    //     url: `/admin/${req?.params}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: [tagTypes.employee],
-    // }),
+    deleteAdmin: build.mutation({
+      query: (req) => ({
+        url: `/admin/${req?.params}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.employee],
+    }),
   }),
 });
 
@@ -46,6 +46,7 @@ export const {
   useAddEmployeeMutation,
   useGetEmployeeQuery,
   useUpdateAdminMutation,
+  useDeleteAdminMutation,
 } = employeeApi;
 
 export default employeeApi;

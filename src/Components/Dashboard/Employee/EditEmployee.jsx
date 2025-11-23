@@ -37,7 +37,7 @@ const EditEmployee = ({ editEmployModal, currentRecord, handleCancel }) => {
       editEmployee,
       {
         body: { ...values, adminRole: "sub-admin" },
-        params: currentRecord?._id,
+        params: currentRecord?.employeeId,
       },
       "Updating Employee..."
     );
