@@ -2,8 +2,8 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import { toast } from "sonner";
 import { useUpdateSubscriptionMutation } from "../../Redux/api/subscription/subscriptionApi";
-import { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -13,9 +13,23 @@ const EditSubscriptionModal = ({
   currentRecord,
 }) => {
   const [form] = Form.useForm();
-
   const [facilities, setFacilities] = useState([""]);
   const [updateSubscription] = useUpdateSubscriptionMutation();
+
+  // Pre-fill form when currentRecord changes
+  useEffect(() => {
+    if (currentRecord) {
+      form.setFieldsValue({
+        planCategory: currentRecord.duration === 30 ? "monthly" : "yearly",
+        planName: currentRecord.planName,
+        shortBio: currentRecord.description,
+        planPrice: currentRecord.price,
+      });
+      setFacilities(
+        currentRecord.feature?.length ? currentRecord.feature : [""]
+      );
+    }
+  }, [currentRecord, form]);
 
   const handleAdd = () => {
     setFacilities([...facilities, ""]);
@@ -25,32 +39,33 @@ const EditSubscriptionModal = ({
     const newFacilities = [...facilities];
     newFacilities[index] = value;
     setFacilities(newFacilities);
-    form.setFieldValue("facilities", newFacilities); // sync with form
+  };
+
+  const handleRemove = (index) => {
+    if (facilities.length === 1) return; // Always keep at least 1
+    const newFacilities = facilities.filter((_, i) => i !== index);
+    setFacilities(newFacilities);
   };
 
   const handleSave = () => {
     const toastId = toast.loading("Loading....");
 
     form.validateFields().then((values) => {
-      // Create a new subscription object
-      const newSubscription = {
-        planCategory: values.planCategory || currentRecord.planCategory,
-        planName: values.planName || currentRecord.planName,
-        shortBio: values.shortBio || currentRecord.shortBio,
-        price: Number(values.planPrice) || currentRecord.price,
-        timeline: values.planCategory === "monthly" ? 30 : 365,
-        facilities: facilities.length > 1 ? facilities : currentRecord.facilities,
+      const updatedSubscription = {
+        planName: values.planName,
+        description: values.shortBio,
+        feature: facilities,
+        price: Number(values.planPrice),
+        duration: values.planCategory === "monthly" ? 30 : 365,
       };
 
-      console.log(newSubscription, "newSubscription");
-      console.log(facilities, "facilities");
-      console.log(currentRecord?.facilities, "currentRecord.facilities");
-
-      updateSubscription({ newSubscription, id: currentRecord._id })
+      updateSubscription({
+        newSubscription: updatedSubscription,
+        id: currentRecord._id,
+      })
         .unwrap()
-        .then((res) => res.json)
-        .then((data) => {
-          toast.success("subscription updated", {
+        .then(() => {
+          toast.success("Subscription updated", {
             id: toastId,
             duration: 2000,
           });
@@ -58,14 +73,10 @@ const EditSubscriptionModal = ({
         .catch((error) => {
           toast.error(
             error?.data?.message || error?.error || "Something went wrong",
-            {
-              id: toastId,
-              duration: 2000,
-            }
+            { id: toastId, duration: 2000 }
           );
         });
 
-      form.resetFields();
       handleCancelEditModal();
     });
   };
@@ -89,22 +100,8 @@ const EditSubscriptionModal = ({
             className="h-11 !text-sm"
             style={{ backgroundColor: "transparent", color: "#000" }}
           >
-            <Option
-              style={{
-                color: "#000",
-              }}
-              value="monthly"
-            >
-              Monthly
-            </Option>
-            <Option
-              style={{
-                color: "#000",
-              }}
-              value="yearly"
-            >
-              Yearly
-            </Option>
+            <Option value="monthly">Monthly</Option>
+            <Option value="yearly">Yearly</Option>
           </Select>
         </Form.Item>
 
@@ -151,25 +148,30 @@ const EditSubscriptionModal = ({
           name="facilities"
           style={{ fontWeight: "500", margin: "15px 0px" }}
         >
-          <>
-            {facilities.map((facility, index) => (
+          {facilities.map((facility, index) => (
+            <div key={index} className="flex items-center gap-2 mb-2">
               <Input
-                key={index}
                 value={facility}
                 onChange={(e) => handleChange(index, e.target.value)}
                 placeholder={`Facility ${index + 1}`}
-                className="px-4 py-3 mb-2 rounded-xl border-gray-300 hover:border-[#185DDE] focus:border-[#185DDE] focus:outline-none bg-transparent"
+                className="px-4 py-3 rounded-xl border-gray-300 hover:border-[#185DDE] focus:border-[#185DDE] focus:outline-none bg-transparent flex-1"
               />
-            ))}
-            <Button
-              onClick={handleAdd}
-              icon={<PlusOutlined />}
-              type="dashed"
-              style={{ marginTop: "10px" }}
-            >
-              Add Facility
-            </Button>
-          </>
+              {facilities.length > 1 && (
+                <MinusCircleOutlined
+                  onClick={() => handleRemove(index)}
+                  className="text-red-500 text-xl cursor-pointer"
+                />
+              )}
+            </div>
+          ))}
+          <Button
+            onClick={handleAdd}
+            icon={<PlusOutlined />}
+            type="dashed"
+            style={{ marginTop: "10px" }}
+          >
+            Add Facility
+          </Button>
         </Form.Item>
 
         {/* Submit Button */}
@@ -178,7 +180,7 @@ const EditSubscriptionModal = ({
             onClick={handleSave}
             className="w-full h-11 rounded-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium mt-6"
           >
-            Add
+            Save
           </Button>
         </Form.Item>
       </Form>

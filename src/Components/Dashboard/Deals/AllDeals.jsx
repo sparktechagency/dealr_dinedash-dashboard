@@ -58,6 +58,7 @@ const AllDeals = () => {
             editDealsModalOpen={editDealsModalOpen}
             setDeleteDealsModalOpen={setDeleteDealsModalOpen}
             deleteDealsModalOpen={deleteDealsModalOpen}
+            setCurrentRecord={setCurrentRecord}
           />
 
           <CreateDealModal

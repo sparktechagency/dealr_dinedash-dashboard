@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Button, Modal } from "antd";
 import { useDeleteSubscriptionMutation } from "../../Redux/api/subscription/subscriptionApi";
-import { toast } from "sonner";
+import tryCatchWrapper from "../../utils/tryCatchWrapper";
 
 const DeleteSubscriptionModal = ({
   isDeleteModalOpen,
@@ -9,16 +9,17 @@ const DeleteSubscriptionModal = ({
   currentRecord,
 }) => {
   const [deleteSubscription] = useDeleteSubscriptionMutation();
-  const handleBlock = (currentRecord) => {
-    if (currentRecord) {
-      deleteSubscription(currentRecord._id)
-        .then(() => {
-          toast.success("Subscription deleted successfully");
-          handleCancelDeleteModal();
-        })
-        .catch((error) => {
-          toast.error(error?.message || "Error updating subscription");
-        });
+  const handleBlock = async () => {
+    if (!currentRecord) return; // safety check
+
+    const res = await tryCatchWrapper(
+      deleteSubscription,
+      { params: currentRecord._id },
+      "Deleting Subscription..."
+    );
+
+    if (res?.statusCode === 201) {
+      handleCancelDeleteModal();
     }
   };
 

@@ -1,5 +1,6 @@
 import { Button, Pagination } from "antd";
 import image from "../../../../public/images/deals.jpg";
+import PropTypes from "prop-types";
 
 const AllDealsTab = ({
   isDealAddModalOpen,
@@ -8,6 +9,7 @@ const AllDealsTab = ({
   editDealsModalOpen,
   setDeleteDealsModalOpen,
   deleteDealsModalOpen,
+  setCurrentRecord,
 }) => {
   return (
     <div className="mt-3 h-screen">
@@ -23,7 +25,10 @@ const AllDealsTab = ({
                 />
                 <div className="absolute top-2 right-2 flex space-x-2">
                   <Button
-                    onClick={() => setEditDealsModalOpen(true)}
+                    onClick={() => {
+                      setEditDealsModalOpen(true);
+                      setCurrentRecord({});
+                    }}
                     className="p-1"
                   >
                     <svg
@@ -44,7 +49,10 @@ const AllDealsTab = ({
                     </svg>
                   </Button>
                   <Button
-                    onClick={() => setDeleteDealsModalOpen(true)}
+                    onClick={() => {
+                      setDeleteDealsModalOpen(true);
+                      setCurrentRecord({});
+                    }}
                     className="p-1"
                   >
                     <svg
@@ -146,4 +154,13 @@ const AllDealsTab = ({
   );
 };
 
+AllDealsTab.propTypes = {
+  isDealAddModalOpen: PropTypes.bool.isRequired,
+  handleCancel: PropTypes.func.isRequired,
+  setEditDealsModalOpen: PropTypes.func.isRequired,
+  editDealsModalOpen: PropTypes.bool.isRequired,
+  setDeleteDealsModalOpen: PropTypes.func.isRequired,
+  deleteDealsModalOpen: PropTypes.bool.isRequired,
+  setCurrentRecord: PropTypes.func.isRequired,
+};
 export default AllDealsTab;

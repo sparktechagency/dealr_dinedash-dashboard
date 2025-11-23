@@ -3,14 +3,14 @@ import { baseApi } from "../baseApi";
 const subScriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSubscription: builder.query({
-      query: (args) => {
+      query: () => {
         const params = new URLSearchParams();
-        args?.forEach((item) => {
-          params.append(item.name, item.value);
-        });
+        // args?.forEach((item) => {
+        //   params.append(item.name, item.value);
+        // });
 
         return {
-          url: `/subscription`,
+          url: `/subscription/admin/all`,
           method: "GET",
           params: params,
         };
@@ -20,7 +20,7 @@ const subScriptionApi = baseApi.injectEndpoints({
 
     createSubscription: builder.mutation({
       query: (payload) => ({
-        url: `/subscription/create`,
+        url: `/subscription/add`,
         method: "POST",
         body: payload,
       }),
@@ -29,17 +29,25 @@ const subScriptionApi = baseApi.injectEndpoints({
 
     updateSubscription: builder.mutation({
       query: (data) => ({
-        url: `/subscription/${data.id}`,
-        method: "PATCH",
+        url: `/subscription/edit/${data.id}`,
+        method: "PUT",
         body: data.newSubscription,
       }),
       invalidatesTags: ["subscription"],
     }),
 
+    toggleSubscriptionStatus: builder.mutation({
+      query: (req) => ({
+        url: `/subscription/toggle/${req.params}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["subscription"],
+    }),
+
     deleteSubscription: builder.mutation({
-      query: (data) => {
+      query: (req) => {
         return {
-          url: `/subscription/${data}`, // Assuming 'data' is the ID of the subscription
+          url: `/subscription/${req.params}`, // Assuming 'data' is the ID of the subscription
           method: "DELETE",
         };
       },
@@ -52,5 +60,6 @@ export const {
   useGetAllSubscriptionQuery,
   useCreateSubscriptionMutation,
   useUpdateSubscriptionMutation,
+  useToggleSubscriptionStatusMutation,
   useDeleteSubscriptionMutation,
 } = subScriptionApi;
