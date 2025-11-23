@@ -1,0 +1,64 @@
+{
+    "dashboardCard": {
+        "count": "Dashboard-Anzahl",
+        "activeSubcription": "Aktive Abonnements",
+        "subscriptionRevenue": "Abonnementsumsatz",
+        "conversationRate": "Conversion-Rate",
+        "churnRate": "Abwanderungsrate",
+        "activeUsers": "Aktive Benutzer",
+        "downloadsvsSubscriptions": "Downloads vs Abonnements",
+        "growthTrends": "Wachstumszahlen",
+        "downloads": "Downloads",
+        "subscribers": "Abonnenten",
+        "yeartoDatePerformance": "Leistung seit Jahresbeginn",
+        "recentUsers": "Neueste Benutzer"
+    },
+    "modalMessage": {
+        "block": "Möchten Sie diesen Kunden sperren?",
+        "cancel": "Stornieren",
+        "unblock": "Möchten Sie diesen Kunden entsperren?",
+        "blockButton": "Sperren",
+        "customerDetails": "Kundeninformationen",
+        "seeAll": "Sehen Sie alle Details zu",
+        "userInfo": "Benutzerinformationen"
+    },
+    "view": {
+        "serialNumber": "Seriennummer",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Telefon",
+        "joiningDate": "Beitrittstag",
+        "postCode": "Postleitzahl",
+        "premiumAccess": "Gewähren Sie Premium-Zugang",
+        "makeThisCustomerAsDealer": "Diesen Kunden zum Händler machen"
+    },
+    "sidebar": {
+        "dashboard": "Armaturenbrett",
+        "users": "Benutzer",
+        "customers": "Kunden",
+        "dealers": "Händler",
+        "allDealers": "Alle Händler",
+        "dealerRequest": "Händleranfrage",
+        "potentialsDealer": "Potentielle Händler",
+        "deals": "Angebote",
+        "allDeals": "Alle Angebote",
+        "dealsAnalytics": "Deals-Statistiken",
+        "cities": "Städte",
+        "earnings": "Verdienst",
+        "subscription": "Abonnement",
+        "employees": "Mitarbeiter",
+        "profile": "Profil",
+        "settings": "Einstellungen",
+        "logout": "Abmelden"
+    },
+    "customers": {
+        "customerList": "Kundenliste",
+        "sendNotification": "Senden Sie Benachrichtigungen an gefilterte Liste",
+        "selectRegion": "Region auswhlen",
+        "selectPostCode": "Postleitzahl auswahlen"
+    },
+    "language": {
+        "en": "English",
+        "fr": "Français"
+    }
+}

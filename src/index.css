@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+* {
+  font-family: "Outfit", sans-serif;
+}
+
+.ant-table-thead>tr>th {
+  border-bottom: 2px solid #185DDE !important;
+}
+
+/* .ant-modal-content {
+    background-color: #B7CDF5 !important;
+    border-radius: 8px;
+} */
+
+
+.scrollbar-hide {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.custom-yellow-switch.ant-switch-checked {
+  background-color: #185DDE !important;
+  border-color: #185DDE !important;
+}
+
+.ant-select-selection-placeholder {
+  color: #185DDE !important;
+}
+
+.ant-menu-item{
+  font-size: 20px !important;
+  margin: 10px 0px !important;
+}
+
+.ant-menu-submenu-title{
+  font-size: 20px !important;
+}
+
+:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title,
+:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light>.ant-menu .ant-menu-submenu-selected>.ant-menu-submenu-title {
+  color: #185DDE !important;
+}
+
+.tabs-wrapper {
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-block;
+  /* background: #B7CDF5 !important; */
+}
+
+.custom-tab {
+  padding: 14px 16px;
+  font-size: 18px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.custom-tab:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 8px;
+  height: 24px;
+  width: 1px;
+}
+
+.custom-tabs .ant-tabs-nav {
+  background-color: #B7CDF5;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+div#rc-tabs-1-panel-dealers {
+  width: 76.5vw;
+}
+
+.ant-menu-submenu-open .ant-menu-submenu-selected{
+  background: #185DDE !important;
+}
