@@ -40,7 +40,7 @@ const SignIn = () => {
         secure: false,
       });
       form.resetFields();
-      router("/", { replace: true });
+      window.location.reload();
     } else if (
       res?.statusCode === 200 &&
       res?.data?.attributes?.user?.role?.[0] !== "admin"

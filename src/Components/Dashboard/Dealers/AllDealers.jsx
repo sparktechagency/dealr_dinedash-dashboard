@@ -8,6 +8,8 @@ import PageWrapper from "../../UI/PageWrapper";
 import DealerActionModal from "./DealerActionModal";
 import DealerEditModal from "./DealerEditModal";
 import DealerViewModal from "./DealerViewModal";
+import { useGetAllUsersQuery } from "../../../Redux/api/user/userApi";
+import DealerUnblockModal from "./DealerUnblockModal";
 
 export const dealsRedeemedData = [
   {
@@ -45,19 +47,26 @@ const AllDealers = () => {
   const [pageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
 
-  const { data: allRecipes, isLoading } = useGetAllRecipeQuery([
+  const { data: users, isFetching } = useGetAllUsersQuery([
+    { name: "role", value: "business" },
     { name: "limit", value: pageSize },
     { name: "page", value: currentPage },
+    { name: "search", value: searchText },
   ]);
+
+  const allDealer = users?.data?.attributes?.users || [];
+  const totalDealer = users?.data?.attributes?.pagination?.totalResults || 0;
 
   const onSearch = (value) => setSearchText(value);
 
   const [currentRecord, setCurrentRecord] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [actionModal, setActionModal] = useState(false);
+  const [isUnblockModalOpen, setIsUnblockModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleCancel = () => {
+    setIsUnblockModalOpen(false);
     setIsViewModalOpen(false);
     setActionModal(false);
     setIsEditModalOpen(false);
@@ -121,7 +130,12 @@ const AllDealers = () => {
         className="mb-10"
       >
         <DealerTable
+          allDealer={allDealer}
+          loading={isFetching}
+          limit={pageSize}
+          page={currentPage}
           setActionModal={setActionModal}
+          setIsUnblockModalOpen={setIsUnblockModalOpen}
           setIsViewModalOpen={setIsViewModalOpen}
           setCurrentRecord={setCurrentRecord}
         />
@@ -129,6 +143,12 @@ const AllDealers = () => {
         <DealerActionModal
           isModalOpen={actionModal}
           handleCancel={handleCancel}
+          currentRecord={currentRecord}
+        />
+        <DealerUnblockModal
+          isModalOpen={isUnblockModalOpen}
+          handleCancel={handleCancel}
+          currentRecord={currentRecord}
         />
 
         <DealerViewModal
@@ -137,19 +157,22 @@ const AllDealers = () => {
           currentRecord={currentRecord}
           setIsEditModalOpen={setIsEditModalOpen}
           handleCancel={handleCancel}
+          setCurrentRecord={setCurrentRecord}
         />
 
         <DealerEditModal
           isEditModalOpen={isEditModalOpen}
           setIsViewModalOpen={setIsViewModalOpen}
           handleCancel={handleCancel}
+          currentRecord={currentRecord}
         />
 
         <div className="my-6 pb-10">
           <Pagination
-            onChange={(value) => setCurrentPage(value)}
-            pageSize={10}
-            total={50}
+            current={currentPage}
+            pageSize={pageSize}
+            onChange={(page) => setCurrentPage(page)}
+            total={totalDealer}
             className="flex justify-end "
           />
         </div>

@@ -15,6 +15,7 @@ import TextArea from "antd/es/input/TextArea";
 import RButton from "../../../ui/RButton";
 import ReuseSelect from "../../UI/Form/ReusableSelect";
 import dayjs from "dayjs";
+import { useAddDealMutation } from "../../../Redux/api/deals/dealsApi";
 
 const dayOptions = [
   { value: "monday", label: "Monday" },
@@ -27,6 +28,9 @@ const dayOptions = [
 ];
 
 const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
+  const [form] = Form.useForm();
+  const [addDeal] = useAddDealMutation();
+
   const [timeFrames, setTimeFrames] = useState([
     { day: null, startTime: null, endTime: null },
   ]);
@@ -34,7 +38,24 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
 
   const onFinish = async (values) => {
     console.log({ ...values, timeFrames });
-    message.success("Deal Created!");
+    const activeTime = timeFrames
+      .filter((frame) => frame.day && frame.startTime && frame.endTime) // only valid frames
+      .map((frame) => ({
+        day: frame.day.charAt(0).toUpperCase() + frame.day.slice(1), // Capitalize first letter
+        startTime: frame.startTime.format("HH:mm"),
+        endTime: frame.endTime.format("HH:mm"),
+      }));
+
+    const payload = {
+      business: values.businessName, // Replace with actual business ID if needed
+      description: values.description || "",
+      isActive: true,
+      benefitAmmount: values.benefitAmount || 0,
+      dealType: values.dealType || "",
+      reuseableAfter: values.reusableAfter || 0,
+      maxClaimCount: values.maxClaimCount || 1,
+      activeTime,
+    };
     handleCancel();
   };
 

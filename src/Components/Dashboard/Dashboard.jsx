@@ -129,7 +129,7 @@ const Dashboard = () => {
     <div className="w-full min-h-[90vh]">
       <div>
         {/* Card Items */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-5 justify-items-center py-5 px-8 bg-white rounded-xl border-2 border-[#185DDE]">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-5 justify-items-center py-5 px-8 bg-white rounded-xl border-2 border-[#185DDE]">
           <CountCard
             title={t("dashboardCard.count")}
             image={DashboardIcons.download}
@@ -320,7 +320,7 @@ const Dashboard = () => {
             </div>
             <UsersTable data={users} loading={loading} />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

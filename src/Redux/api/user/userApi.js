@@ -22,32 +22,78 @@ const userApi = baseApi.injectEndpoints({
 
     getAllUsers: builder.query({
       query: (args) => {
-        const params = new URLSearchParams();
+        const filter = new URLSearchParams();
 
-        args?.forEach((item) => {
-          params.append(item.name, item.value);
-        });
+        if (args && Array.isArray(args)) {
+          args.forEach((item) => {
+            filter.append(item.name, item.value);
+          });
+        }
 
         return {
-          url: `/users/all_users`,
+          url: `/users/all`,
           method: "GET",
-          params: params,
+          params: filter,
         };
       },
       providesTags: [tagTypes.user],
     }),
-
-    blockUser: builder.mutation({
-      query: (userId) => {
-        return {
-          url: `/users/block_user`,
-          method: "PATCH",
-          body: userId,
-        };
-      },
+    getSpacificUser: builder.query({
+      query: (id) => ({
+        url: `/users/dealer-details/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    editProfileAsAdmin: builder.mutation({
+      query: (req) => ({
+        url: `/users/edit/${req.params}`,
+        method: "PUT",
+        body: req.body,
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
+    blockAndUnblockUser: builder.mutation({
+      query: (req) => ({
+        url: `/users/banUnban/${req.params}`,
+        method: "PUT",
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
+    makeDealer: builder.mutation({
+      query: ({ params }) => ({
+        url: `/users/make-dealer/${params}`,
+        method: "PUT",
+      }),
       invalidatesTags: [tagTypes.user],
     }),
 
+    allDealerRequest: builder.query({
+      query: ({ page, limit }) => ({
+        url: `/users/dealer-req?role=business`,
+        method: "GET",
+        params: {
+          page,
+          limit,
+        },
+      }),
+      providesTags: ["DealerRequest"],
+    }),
+
+    acceptDealerRequest: builder.mutation({
+      query: (req) => ({
+        url: `/users/accept-dealerReq/${req.params}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["DealerRequest"],
+    }),
+    declineDealerRequest: builder.mutation({
+      query: (req) => ({
+        url: `/users/delete-dealerReq/${req.params}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["DealerRequest"],
+    }),
     getAllNotifications: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -79,7 +125,13 @@ export const {
   useUpdateProfileMutation,
   useGetMyProfileQuery,
   useGetAllUsersQuery,
-  useBlockUserMutation,
+  useGetSpacificUserQuery,
+  useEditProfileAsAdminMutation,
+  useBlockAndUnblockUserMutation,
+  useMakeDealerMutation,
+  useAllDealerRequestQuery,
+  useAcceptDealerRequestMutation,
+  useDeclineDealerRequestMutation,
   useGetAllNotificationsQuery,
   useDeleteDriverRequestMutation,
 } = userApi;

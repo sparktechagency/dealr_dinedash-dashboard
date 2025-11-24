@@ -8,8 +8,8 @@ function AuthRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && user?.role?.[0] === "admin") {
-      navigate(`/${user?.role?.[0]}/dashboard`, {
+    if (user && user?.role?.includes("admin")) {
+      navigate(`/admin/dashboard`, {
         replace: true,
       });
     } else {

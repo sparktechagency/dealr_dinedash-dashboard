@@ -1,33 +1,75 @@
-import { Button, Pagination } from "antd";
-import image from "../../../../public/images/deals.jpg";
+import { Button, Pagination, Rate } from "antd";
 import PropTypes from "prop-types";
+import { useAllApprovedDealQuery } from "../../../Redux/api/deals/dealsApi";
+import { useState } from "react";
+import { baseUrl } from "../../../constant/baseUrl";
+import { FaLocationDot } from "react-icons/fa6";
+import { MdOutlineAvTimer } from "react-icons/md";
+import SpinLoader from "../../UI/SpinLoader";
 
 const AllDealsTab = ({
   isDealAddModalOpen,
-  handleCancel,
   setEditDealsModalOpen,
   editDealsModalOpen,
   setDeleteDealsModalOpen,
   deleteDealsModalOpen,
   setCurrentRecord,
 }) => {
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const { data, isFetching } = useAllApprovedDealQuery({ page, limit });
+
+  const allDeals = data?.data?.attributes?.result || [];
+  const totalDeals = data?.data?.attributes?.pagination?.totalResults || 0;
+
+  const serverUrl = baseUrl;
+
+  if (isFetching) {
+    return (
+      <div>
+        <SpinLoader />
+      </div>
+    );
+  }
   return (
     <div className="mt-3 h-screen">
-      <div className="grid grid-cols-2 gap-6 px-28">
-        {Array.from({ length: 5 }).map((_, index) => {
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-baseline gap-6 w-full">
+        {allDeals?.map((item, index) => {
+          // Inside your map loop, for each 'item'
+          const days = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ];
+          const todayIndex = new Date().getDay(); // 0 = Sunday, 1 = Monday...
+          const todayDay = days[todayIndex];
+
+          // Find today's opening hours
+          const todayHours = item.openingHours?.find((h) => h.day === todayDay);
+
+          let openTime =
+            `${todayHours?.openingTime || "0"} - ${
+              todayHours?.closingTime || "0"
+            }` || "";
+
           return (
-            <div key={index} className="rounded-xl shadow-lg">
-              <div className="relative h-56">
+            <div key={index} className="rounded-xl shadow-lg !w-full">
+              <div className="relative  !w-full">
                 <img
-                  src={image}
-                  alt="The Rio Lounge"
+                  src={serverUrl + item?.businessImage}
+                  alt={item?.businessName}
                   className="w-full !h-56 object-cover rounded-tr-xl rounded-tl-xl"
                 />
                 <div className="absolute top-2 right-2 flex space-x-2">
                   <Button
                     onClick={() => {
                       setEditDealsModalOpen(true);
-                      setCurrentRecord({});
+                      setCurrentRecord(item);
                     }}
                     className="p-1"
                   >
@@ -73,34 +115,30 @@ const AllDealsTab = ({
               </div>
 
               {/* Content */}
-              <div className=" border border-[#185DDE] rounded-br-xl bg-[#E8EFFC] rounded-bl-xl border-t-0">
+              <div className=" border border-[#185DDE] rounded-br-xl bg-[#E8EFFC] rounded-bl-xl border-t-0 !w-full">
                 <div className="flex justify-between items-start p-4">
                   <div>
                     <h3 className="text-md font-semibold text-gray-800">
-                      The Rio Lounge
+                      {item?.businessname}
                     </h3>
                     <div className="flex items-center mt-1">
-                      <div className="flex text-yellow-400 text-sm">
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="far fa-star text-gray-300"></i>
-                      </div>
-                      <span className="ml-2 text-sm text-gray-600">(120)</span>
+                      <Rate disabled value={item?.rating} /> (
+                      {item?.user_ratings_total})
                     </div>
                   </div>
                   <div className="text-right text-sm text-gray-600">
-                    <p>Price Range : €50-5000</p>
-                    <p>Open Time : 9 AM - 10 PM</p>
+                    <p>
+                      Price Range : €{item?.minPrice}-€{item?.maxPrice}
+                    </p>
+                    <p>Open Time : {openTime}</p>
                   </div>
                 </div>
 
                 {/* Benefit Tag */}
                 <div className="mt-4 flex items-start justify-between">
                   <div className="border border-[#185DDE] w-full"></div>
-                  <span className="block !w-[220px] -mt-5 px-4 py-3 bg-[#185DDE] text-white text-sm rounded-full font-medium">
-                    6 € Benefit
+                  <span className="block !w-fit text-nowrap -mt-5 px-4 py-3 bg-[#185DDE] text-white text-sm rounded-full font-medium">
+                    {item?.benefitAmount} € Benefit
                   </span>
                   <div className="border border-[#185DDE] w-full"></div>
                 </div>
@@ -108,27 +146,28 @@ const AllDealsTab = ({
                 {/* Offer */}
                 <div className="mt-4 p-4">
                   <h4 className="text-md font-semibold text-gray-800">
-                    Free cold drinks
+                    {item?.dealType}
                   </h4>
                   <p className="text-sm text-gray-600 mt-1">
-                    Lorem ipsum dolor sit amet consectetur. Rhoncus molestie
-                    amet non pellentesque.
+                    {item?.description}
                   </p>
                 </div>
 
                 {/* Bottom Info */}
                 <div className="flex justify-between items-center mt-4 border-t p-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <i className="fas fa-clock text-blue-500"></i>
-                    <span>
-                      <strong>60 Days</strong>
-                    </span>
+                  <div className="flex items-center gap-1">
+                    <MdOutlineAvTimer className="text-[#1d4ed8] size-8" />
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <strong>Reusable After</strong>
+                      <p>{item?.reusableAfter}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <i className="fas fa-location-dot text-[#185DDE]"></i>
-                    <span>
-                      <strong>LOCATION</strong> Gulshan 2.
-                    </span>
+                  <div className="flex items-center gap-1">
+                    <FaLocationDot className="text-[#1d4ed8] size-5" />
+                    <div className="flex flex-col text-sm text-gray-600">
+                      <strong>LOCATION</strong>
+                      <p>{item?.businessAddress}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -144,9 +183,10 @@ const AllDealsTab = ({
         } my-6 py-5 bg-white sticky bottom-0 w-full`}
       >
         <Pagination
-          //   onChange={(value) => setCurrentPage(value)}
-          pageSize={12}
-          total={60}
+          onChange={(page) => setPage(page)}
+          total={totalDeals}
+          pageSize={limit}
+          current={page}
           className="flex justify-end "
         />
       </div>

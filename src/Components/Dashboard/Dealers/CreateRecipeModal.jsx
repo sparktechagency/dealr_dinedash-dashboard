@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Select, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";

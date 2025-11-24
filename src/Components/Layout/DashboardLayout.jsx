@@ -20,8 +20,11 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { AllImages } from "../../../public/images/AllImages";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
+import useUserData from "../../hooks/useUserData";
+import { categoryRoutesMap } from "../Routes/CategoryProtectedRoute";
 
 const DashboardLayout = () => {
+  const user = useUserData();
   const location = useLocation();
   const pathSegment = location.pathname.split("/").pop();
   const [collapsed, setCollapsed] = useState(false);
@@ -52,6 +55,20 @@ const DashboardLayout = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const canAccess = (key) => {
+    if (!user.categoryPermissions) return false;
+    if (user.categoryPermissions.includes("all")) return true;
+
+    // Check if any of user's categories include this route
+    return user.categoryPermissions.some((category) => {
+      return categoryRoutesMap[category]?.some((route) => {
+        if (route === "*") return true; // all access
+        // Exact match or key starts with route (for nested routes)
+        return key === route || key.startsWith(route.split("/")[0]);
+      });
+    });
+  };
 
   const adminMenuItems = [
     {
@@ -275,6 +292,35 @@ const DashboardLayout = () => {
     },
   ];
 
+  const filterMenuItems = (items) => {
+    return items
+      .filter((item) => {
+        // ALWAYS VISIBLE ITEMS
+        if (
+          item.key === "profile" ||
+          item.key === "logout" ||
+          item.key === "settings"
+        ) {
+          return true;
+        }
+
+        // Permission based
+        return (
+          canAccess(item.key) || (item.children && item.children.length > 0)
+        );
+      })
+      .map((item) => {
+        if (item.children) {
+          return {
+            ...item,
+            children: filterMenuItems(item.children),
+          };
+        }
+        return item;
+      });
+  };
+
+  const visibleAdminMenuItems = filterMenuItems(adminMenuItems);
   return (
     <div className="h-screen bg-[#B7CDF5] ">
       <Layout className="!relative !bg-[#B7CDF5] ">
@@ -318,7 +364,7 @@ const DashboardLayout = () => {
               color: "#185DDE",
               paddingRight: "6px",
             }}
-            items={adminMenuItems}
+            items={visibleAdminMenuItems}
           />
         </Sider>
         <Layout style={{ background: "#B7CDF5", padding: "0px 20px" }}>

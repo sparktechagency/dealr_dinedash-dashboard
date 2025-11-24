@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
 import { Modal } from "antd";
-import { useBlockAndUnblockUserMutation } from "../../../Redux/api/user/userApi";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useBlockAndUnblockUserMutation } from "../../../Redux/api/user/userApi";
 
-const DealerActionModal = ({ isModalOpen, handleCancel, currentRecord }) => {
+const DealerUnblockModal = ({ isModalOpen, handleCancel, currentRecord }) => {
   const [blockAndUnblockUser] = useBlockAndUnblockUserMutation();
 
-  const handleBlock = async (record) => {
+  const handleUnblock = async (record) => {
     const res = await tryCatchWrapper(
       blockAndUnblockUser,
       {
         params: record?._id,
       },
-      "Blocking..."
+      "Unblocking..."
     );
     if (res?.statusCode === 200) {
       handleCancel();
@@ -22,7 +22,7 @@ const DealerActionModal = ({ isModalOpen, handleCancel, currentRecord }) => {
     <Modal open={isModalOpen} onCancel={handleCancel} footer={null} width={450}>
       <div className="mt-8">
         <p className="text-2xl font-medium text-center">
-          Do you want to block this Customer?
+          Do you want to unblock this Customer?
         </p>
         <div className="flex gap-10 px-8 mt-6">
           {/* Cancel Button */}
@@ -35,10 +35,10 @@ const DealerActionModal = ({ isModalOpen, handleCancel, currentRecord }) => {
 
           {/* Yes Button */}
           <button
-            onClick={() => handleBlock(currentRecord)}
-            className="px-5 h-11 w-full rounded-xl bg-[#CE0000] text-white hover:bg-[#CE0000]"
+            onClick={() => handleUnblock(currentRecord)}
+            className="px-5 h-11 w-full rounded-xl bg-green-500 text-white hover:bg-green-500"
           >
-            Block
+            Unblock
           </button>
         </div>
       </div>
@@ -46,4 +46,4 @@ const DealerActionModal = ({ isModalOpen, handleCancel, currentRecord }) => {
   );
 };
 
-export default DealerActionModal;
+export default DealerUnblockModal;

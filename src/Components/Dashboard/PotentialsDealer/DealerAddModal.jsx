@@ -2,11 +2,35 @@ import { ConfigProvider, Form, Input, Modal } from "antd";
 import RButton from "../../../ui/RButton";
 import TextArea from "antd/es/input/TextArea";
 import ReuseSelect from "../../UI/Form/ReusableSelect";
+import { useAddPotentialDealerMutation } from "../../../Redux/api/potentialDealer/potentialDealerApi";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
 // eslint-disable-next-line react/prop-types
 const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const [form] = Form.useForm();
+  const [addPotentialDealer] = useAddPotentialDealerMutation();
+  const onFinish = async (values) => {
+    const payload = {
+      businessName: values.businessName,
+      email: values.email,
+      detialsAddress: values.detialsAddress,
+      dealerType: values.dealerType,
+      contactPerson: values.contactPerson,
+      website: values.website,
+      acquisitionStatus: values.acquisitionStatus,
+      comments: values.comments,
+    };
+
+    const res = await tryCatchWrapper(
+      addPotentialDealer,
+      { body: payload },
+      "Creating New Dealer..."
+    );
+
+    if (res?.statusCode === 201) {
+      form.resetFields();
+      setIsDealerAddModalOpen(false);
+    }
   };
 
   return (
@@ -29,6 +53,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
         style={{ top: 100 }}
       >
         <Form
+          form={form}
           layout="vertical"
           className="bg-transparent w-full"
           onFinish={onFinish}
@@ -39,16 +64,10 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
                 Dealer Name
               </label>
               <Form.Item
-                name="email"
-                className="text-base-color text-base font-medium"
-                rules={[
-                  {
-                    required: true,
-                    message: "Name is Required",
-                  },
-                ]}
+                name="businessName"
+                rules={[{ required: true, message: "Name is Required" }]}
               >
-                <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
+                <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] ..." />
               </Form.Item>
             </div>
 
@@ -58,15 +77,9 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
               </label>
               <Form.Item
                 name="email"
-                className="text-base-color text-base font-medium"
-                rules={[
-                  {
-                    required: true,
-                    message: "Email is Required",
-                  },
-                ]}
+                rules={[{ required: true, message: "Email is Required" }]}
               >
-                <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
+                <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] ..." />
               </Form.Item>
             </div>
           </div>
@@ -77,7 +90,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
                 Contact Person
               </label>
               <Form.Item
-                name="email"
+                name="contactPerson"
                 className="text-base-color text-base font-medium"
               >
                 <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
@@ -89,7 +102,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
                 Website
               </label>
               <Form.Item
-                name="email"
+                name="website"
                 className="text-base-color text-base font-medium"
               >
                 <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
@@ -99,16 +112,12 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
 
           <div className="w-full">
             <ReuseSelect
-              // defaultValue={value}
+              name="dealerType"
               value={"Monthly Earning"}
-              // onChange={(e) => setValue(e)}
-              name="month"
-              selectClassName="!w-full !bg-transparent !h-10 !rounded"
-              labelClassName="!font-medium"
               label="Dealer Type"
-              disabled={false}
+              selectClassName="!w-full !bg-transparent !h-10 !rounded"
               options={[
-                { value: "restaurant", label: "Restaurant" }, // {
+                { value: "restaurant", label: "Restaurant" },
                 { value: "activity", label: "Activity" },
               ]}
             />
@@ -128,16 +137,12 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
 
           <div className="w-full">
             <ReuseSelect
-              // defaultValue={value}
+              name="acquisitionStatus"
               value={"Monthly Earning"}
-              // onChange={(e) => setValue(e)}
-              name="month"
-              selectClassName="!w-full !bg-transparent !h-10 "
-              labelClassName="!font-medium"
               label="Acquisition Status"
-              disabled={false}
+              selectClassName="!w-full !bg-transparent !h-10"
               options={[
-                { value: "Prospect", label: "Prospect" }, // {
+                { value: "Prospect", label: "Prospect" },
                 { value: "Contacted", label: "Contacted" },
                 { value: "Negotiating", label: "Negotiating" },
                 { value: "Closed", label: "Closed" },

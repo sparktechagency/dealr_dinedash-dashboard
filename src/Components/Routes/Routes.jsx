@@ -34,27 +34,34 @@ import City from "../Dashboard/City/City";
 import Employee from "../Dashboard/Employee/Employee";
 import AuthRedirect from "./AuthRedirect";
 import ProtectedRoute from "./ProtectedRoute";
+import CategoryProtectedRoute from "./CategoryProtectedRoute"; // new wrapper
+import Cookies from "js-cookie";
+import { decodedToken } from "../../utils/jwt";
+
+const token = Cookies.get("dealr_accessToken");
+const currentUser = decodedToken(token);
+
+console.log(currentUser?.categoryPermissions);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    index: true, // This applies to the exact path "/"
+    index: true,
     element: <AuthRedirect />,
   },
   {
     path: "/dashboard",
-    index: true, // This applies to the exact path "/"
+    index: true,
     element: <AuthRedirect />,
   },
   {
     path: "/admin",
-    index: true, // This applies to the exact path "/"
+    index: true,
     element: <AuthRedirect />,
   },
   {
     path: "",
     element: <Main />,
-    // errorElement: <Error />,
     children: [
       {
         path: "sign-in",
@@ -75,7 +82,7 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: (
-          <ProtectedRoute role="admin">
+          <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         ),
@@ -86,51 +93,129 @@ const router = createBrowserRouter([
           },
           {
             path: "customers",
-            element: <Customers />,
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="customers">
+                <Customers />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "all-dealer",
-            element: <AllDealers />,
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="all-dealer">
+                <AllDealers />
+              </CategoryProtectedRoute>
+            ),
           },
+
           {
             path: "dealer-details/:id",
-            element: <RecipeDetails />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="dealer-details"
+              >
+                <RecipeDetails />
+              </CategoryProtectedRoute>
+            ),
           },
+
           {
             path: "dealer-request",
-            element: <DealerRequest />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="dealer-request"
+              >
+                <DealerRequest />
+              </CategoryProtectedRoute>
+            ),
           },
-          {
-            path: "potentials_dealer",
-            element: <PotentialsDealer />,
-          },
+
           {
             path: "dealer-request/:id",
-            element: <RecipeRequestDetails />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="dealer-request"
+              >
+                <RecipeRequestDetails />
+              </CategoryProtectedRoute>
+            ),
           },
+
+          {
+            path: "potentials_dealer",
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="potentials_dealer"
+              >
+                <PotentialsDealer />
+              </CategoryProtectedRoute>
+            ),
+          },
+
           {
             path: "all-deals",
-            element: <AllDeals />,
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="all-deals">
+                <AllDeals />
+              </CategoryProtectedRoute>
+            ),
           },
+
           {
             path: "deals-analytics",
-            element: <DealAnalytics />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="deals-analytics"
+              >
+                <DealAnalytics />
+              </CategoryProtectedRoute>
+            ),
           },
+
           {
             path: "cities",
-            element: <City />,
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="cities">
+                <City />
+              </CategoryProtectedRoute>
+            ),
           },
+
           {
             path: "employees",
-            element: <Employee />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="all" // if employee allowed for all
+              >
+                <Employee />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "earning",
-            element: <Earning />,
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="earning">
+                {" "}
+                <Earning />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "subscription",
-            element: <Subscription />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="subscription"
+              >
+                <Subscription />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "profile",
@@ -140,7 +225,6 @@ const router = createBrowserRouter([
             path: "edit-profile",
             element: <EditProfile />,
           },
-
           {
             path: "setting",
             element: <Settings />,
@@ -153,18 +237,31 @@ const router = createBrowserRouter([
             path: "category",
             element: <Category />,
           },
-
           {
             path: "blogs",
             element: <Blogs />,
           },
           {
             path: "privacy-policy",
-            element: <PrivacyPolicy />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="privacy-policy"
+              >
+                <PrivacyPolicy />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "terms-of-service",
-            element: <TermsOfService />,
+            element: (
+              <CategoryProtectedRoute
+                user={currentUser}
+                routeName="terms-of-service"
+              >
+                <TermsOfService />
+              </CategoryProtectedRoute>
+            ),
           },
           {
             path: "forgot-password",

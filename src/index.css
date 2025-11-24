@@ -1,23 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
 
 * {
   font-family: "Outfit", sans-serif;
 }
 
-.ant-table-thead>tr>th {
-  border-bottom: 2px solid #185DDE !important;
+.ant-table-thead > tr > th {
+  border-bottom: 2px solid #185dde !important;
 }
 
 /* .ant-modal-content {
     background-color: #B7CDF5 !important;
     border-radius: 8px;
 } */
-
 
 .scrollbar-hide {
   &::-webkit-scrollbar {
@@ -26,26 +23,31 @@
 }
 
 .custom-yellow-switch.ant-switch-checked {
-  background-color: #185DDE !important;
-  border-color: #185DDE !important;
+  background-color: #185dde !important;
+  border-color: #185dde !important;
 }
 
 .ant-select-selection-placeholder {
-  color: #185DDE !important;
+  color: #185dde !important;
 }
 
-.ant-menu-item{
+.ant-menu-item {
   font-size: 20px !important;
   margin: 10px 0px !important;
 }
 
-.ant-menu-submenu-title{
+.ant-menu-submenu-title {
   font-size: 20px !important;
 }
 
-:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title,
-:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light>.ant-menu .ant-menu-submenu-selected>.ant-menu-submenu-title {
-  color: #185DDE !important;
+:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title,
+:where(.css-dev-only-do-not-override-jv1wfm).ant-menu-light
+  > .ant-menu
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: #185dde !important;
 }
 
 .tabs-wrapper {
@@ -63,7 +65,7 @@
 }
 
 .custom-tab:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   top: 8px;
@@ -72,7 +74,7 @@
 }
 
 .custom-tabs .ant-tabs-nav {
-  background-color: #B7CDF5;
+  background-color: #b7cdf5;
   border-radius: 8px;
   width: fit-content;
 }
@@ -81,6 +83,15 @@ div#rc-tabs-1-panel-dealers {
   width: 76.5vw;
 }
 
-.ant-menu-submenu-open .ant-menu-submenu-selected{
-  background: #185DDE !important;
+.ant-menu-submenu-open .ant-menu-submenu-selected {
+  background: #185dde !important;
+}
+.ant-tabs {
+  width: 100% !important;
+}
+.tabs-wrapper {
+  width: 100% !important;
+}
+.ant-tabs-content-holder {
+  width: 100% !important;
 }

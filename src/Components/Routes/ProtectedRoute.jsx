@@ -2,10 +2,10 @@ import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useUserData from "../../hooks/useUserData";
 
-function ProtectedRoute({ children, role }) {
+function ProtectedRoute({ children }) {
   const user = useUserData();
 
-  if (!user || user?.role?.[0] !== role) {
+  if (!user || !user?.role?.includes("admin")) {
     return <Navigate to="/sign-in" replace />;
   }
 
@@ -14,7 +14,6 @@ function ProtectedRoute({ children, role }) {
 
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  role: PropTypes.string.isRequired,
 };
 
 export default ProtectedRoute;

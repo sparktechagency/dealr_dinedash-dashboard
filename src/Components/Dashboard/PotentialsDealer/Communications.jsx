@@ -1,22 +1,54 @@
-import { Card, Form, Image, Input, Space, Typography } from "antd";
-import mail from "../../../../public/images/dashboard-logo/mail.svg";
-import call from "../../../../public/images/dashboard-logo/phone.svg";
+import { Form, Typography, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import RButton from "../../../ui/RButton";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import {
+  useAddCommunicatrionMutation,
+  useGetPotentialDealerQuery,
+} from "../../../Redux/api/potentialDealer/potentialDealerApi";
+import SpinLoader from "../../UI/SpinLoader";
 
 const { Title } = Typography;
+const { Option } = Select;
 
 const Communications = () => {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const { data, isFetching } = useGetPotentialDealerQuery({});
+  const potentialDealers = data?.data?.attributes?.result || [];
+
+  const [form] = Form.useForm();
+  const [addCommunicatrion] = useAddCommunicatrionMutation();
+
+  const onFinish = async (values) => {
+    const payload = {
+      pDealerId: values.pDealerId,
+      contactType: values.contactType,
+      subject: values.subject,
+      note: values.note,
+    };
+
+    const res = await tryCatchWrapper(
+      addCommunicatrion,
+      { body: payload },
+      "Adding Communication Log..."
+    );
+
+    if (res?.statusCode === 201) {
+      form.resetFields();
+    }
   };
+
+  if (isFetching) {
+    return (
+      <div>
+        <SpinLoader />
+      </div>
+    );
+  }
 
   return (
     <div>
       <div
-        style={{
-          boxShadow: "1px 1px 11px -5px black",
-        }}
+        style={{ boxShadow: "1px 1px 11px -5px black" }}
         className="p-6 rounded-xl mt-3 border border-[#B6B6B6]  w-[77vw]"
       >
         <Title level={2}>Recent Communications</Title>
@@ -24,6 +56,7 @@ const Communications = () => {
 
         <div className="px-6 py-8">
           <Form
+            form={form}
             layout="vertical"
             className="bg-transparent w-full"
             onFinish={onFinish}
@@ -34,16 +67,17 @@ const Communications = () => {
                   Select Dealer
                 </label>
                 <Form.Item
-                  name="email"
+                  name="pDealerId"
                   className="text-base-color text-base font-medium"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Name is Required",
-                    },
-                  ]}
+                  rules={[{ required: true, message: "Dealer is required" }]}
                 >
-                  <Input className="px-4 py-2 rounded-xl bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
+                  <Select placeholder="Select a dealer">
+                    {potentialDealers.map((dealer) => (
+                      <Option key={dealer._id} value={dealer._id}>
+                        {dealer.businessName}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </div>
 
@@ -52,16 +86,17 @@ const Communications = () => {
                   Contact Type
                 </label>
                 <Form.Item
-                  name="email"
+                  name="contactType"
                   className="text-base-color text-base font-medium"
                   rules={[
-                    {
-                      required: true,
-                      message: "Email is Required",
-                    },
+                    { required: true, message: "Contact type is required" },
                   ]}
                 >
-                  <Input className="px-4 py-2 rounded-xl bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
+                  <Select placeholder="Select contact type">
+                    <Option value="call">Call</Option>
+                    <Option value="email">Email</Option>
+                    <Option value="meeting">Meeting</Option>
+                  </Select>
                 </Form.Item>
               </div>
             </div>
@@ -71,10 +106,14 @@ const Communications = () => {
                 Subject
               </label>
               <Form.Item
-                name="email"
+                name="subject"
                 className="text-base-color text-base font-medium"
+                rules={[{ required: true, message: "Subject is required" }]}
               >
-                <Input className="px-4 py-2 rounded-xl bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
+                <Select placeholder="Select subject">
+                  <Option value="contact">Contact</Option>
+                  <Option value="negotiation">Negotiation</Option>
+                </Select>
               </Form.Item>
             </div>
 
@@ -83,60 +122,27 @@ const Communications = () => {
                 Notes
               </label>
               <Form.Item
-                name="email"
+                name="note"
                 className="text-base-color text-base font-medium"
+                rules={[{ required: true, message: "Notes are required" }]}
               >
                 <TextArea
-                  className="px-4 py-2 rounded-xl bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none"
+                  className="px-4 py-2 rounded-xl bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C]"
                   rows={4}
                 />
               </Form.Item>
             </div>
+
             <Form.Item>
               <RButton
                 isLoading={false}
                 loadingMessage="Add Communication Log"
-                type={"submit"}
+                type="submit"
                 className="mt-5"
               />
             </Form.Item>
           </Form>
         </div>
-
-        <Space
-          direction="vertical"
-          size="middle"
-          style={{ display: "flex", marginTop: 16 }}
-        >
-          {/* Activity Card 1 */}
-          <Card className="border border-[#B6B6B6]" style={{ borderRadius: 8 }}>
-            <div className="flex items-center gap-x-5">
-              <Image src={call} />
-              <div>
-                <p className="text-2xl font-medium ">
-                  Initial consultation call
-                </p>
-                <p>AutoMax Solutions</p>
-                <p>
-                  Discussed pricing and implementation timeline. Very positive
-                  response.
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          {/* Activity Card 2 */}
-          <Card className="border border-[#B6B6B6]" style={{ borderRadius: 8 }}>
-            <div className="flex items-center gap-x-5">
-              <Image src={mail} />
-              <div>
-                <p className="text-2xl font-medium">Follow-up proposal</p>
-                <p>AutoMax Solutions</p>
-                <p>Sent detailed proposal with pricing breakdown.</p>
-              </div>
-            </div>
-          </Card>
-        </Space>
       </div>
     </div>
   );

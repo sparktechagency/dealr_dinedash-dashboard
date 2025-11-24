@@ -130,7 +130,7 @@ const AllDeals = () => {
               },
             }}
           >
-            <div className="py-5 flex items-start justify-between">
+            <div className="py-5">
               <div>
                 <Tabs
                   activeKey={activeKey}

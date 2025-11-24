@@ -1,6 +1,22 @@
+/* eslint-disable react/prop-types */
 import { ConfigProvider, Modal } from "antd";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useMakeDealerMutation } from "../../../Redux/api/user/userApi";
 
-const CreateADealer = ({ isModalOpen, setIsCustomerADealer }) => {
+const CreateADealer = ({ isModalOpen, setIsCustomerADealer, currentUser }) => {
+  const [makeAdmin] = useMakeDealerMutation();
+  const handleAccess = async (record) => {
+    const res = await tryCatchWrapper(
+      makeAdmin,
+      {
+        params: record?._id,
+      },
+      "Blocking..."
+    );
+    if (res?.statusCode === 200) {
+      setIsCustomerADealer(false);
+    }
+  };
   return (
     <ConfigProvider>
       <Modal
@@ -25,7 +41,10 @@ const CreateADealer = ({ isModalOpen, setIsCustomerADealer }) => {
             </button>
 
             {/* Yes Button */}
-            <button className="px-5 h-11 w-full rounded-xl bg-[#185DDE] text-white hover:bg-[#0f4cc9]">
+            <button
+              onClick={() => handleAccess(currentUser)}
+              className="px-5 h-11 w-full rounded-xl bg-[#185DDE] text-white hover:bg-[#0f4cc9]"
+            >
               Yes
             </button>
           </div>

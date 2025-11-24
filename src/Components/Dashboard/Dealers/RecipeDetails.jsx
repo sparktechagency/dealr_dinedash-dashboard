@@ -23,7 +23,7 @@ const RecipeDetails = () => {
         <div className="">
           <div className="text-3xl font-medium rounded-t-lg  bg-[#185DDE] text-white mb-5">
             <h1 className="text-3xl font-medium rounded-t-lg p-5 bg-[#185DDE] text-white">
-              Recipe Details
+              Dealer Details
             </h1>
           </div>
         </div>

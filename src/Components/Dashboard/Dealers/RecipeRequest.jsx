@@ -2,55 +2,51 @@
 import { Button, Image, Pagination } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import {
-  useRecipeRequestQuery,
-  useVerifyAndRecipeRequestMutation,
-} from "../../../Redux/api/driver/recipe";
 import Spinner from "../../Shared/Spinner";
 import PageWrapper from "../../UI/PageWrapper";
-import { AllImages } from "../../../../public/images/AllImages";
+import {
+  useAcceptDealerRequestMutation,
+  useAllDealerRequestQuery,
+  useDeclineDealerRequestMutation,
+} from "../../../Redux/api/user/userApi";
+import { baseUrl } from "../../../constant/baseUrl";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
 const DealerRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentRequest, setCurrentRequest] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(12);
+  const [acceptReq] = useAcceptDealerRequestMutation();
+  const [declineReq] = useDeclineDealerRequestMutation();
 
   const navigate = useNavigate();
 
-  const { data, isLoading } = useRecipeRequestQuery([
-    { name: "limit", value: pageSize },
-    { name: "page", value: currentPage },
-  ]);
-  const recipeRequest = data?.data?.result;
-
-  const [verifyAndRecipeRequest] = useVerifyAndRecipeRequestMutation();
+  const { data, isFetching } = useAllDealerRequestQuery({
+    page: currentPage,
+    limit: pageSize,
+  });
+  const allReq = data?.data?.attributes?.users || [];
+  const totalReq = data?.data?.attributes?.pagination?.totalResults || 0;
 
   // Accept request by updating its accepted status
   const handleAccept = async (id) => {
-    const toastId = toast.loading("Loading in...");
-
-    const data = {
-      isAccepted: true,
-    };
-
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(data));
-
-    try {
-      await verifyAndRecipeRequest({ id, data }).unwrap();
-      toast.success("Recipe Request Accepted", {
-        id: toastId,
-        duration: 2000,
-      });
-    } catch (error) {
-      // Log the error for debugging
-      toast.error(error?.data?.message || error?.error || "An error occurred", {
-        id: toastId,
-        duration: 2000,
-      });
-    }
+    await tryCatchWrapper(
+      acceptReq,
+      {
+        params: id,
+      },
+      "Accepting..."
+    );
+  };
+  const handleDecline = async (id) => {
+    await tryCatchWrapper(
+      declineReq,
+      {
+        params: id,
+      },
+      "Accepting..."
+    );
   };
 
   const handleModalCancel = () => {
@@ -58,17 +54,17 @@ const DealerRequest = () => {
   };
 
   const handleTitleClick = (request) => {
-    navigate(`/dealer-request/${request}`, { state: request });
+    navigate(`/admin/dealer-request/${request}`, { state: request });
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Spinner />;
   }
 
   return (
-    <PageWrapper pageTitle="Recipe Request">
+    <PageWrapper pageTitle="Dealer Request" isSearch={false}>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-10 mt-6 ">
-        {Array.from({ length: 50 })?.map((item, index) => (
+        {allReq?.map((item, index) => (
           <div
             key={index}
             className="rounded-[20px] flex flex-col justify-between"
@@ -76,7 +72,7 @@ const DealerRequest = () => {
           >
             <div className="flex items-center justify-between gap-x-2">
               <Image
-                src={AllImages.userImage}
+                src={baseUrl + item?.image}
                 preview={false}
                 width={100}
                 height={100}
@@ -84,22 +80,25 @@ const DealerRequest = () => {
               />
               <div className="flex-1">
                 <div
-
-                onClick={() => handleTitleClick(index)}
+                  className="cursor-pointer"
+                  onClick={() => handleTitleClick(item?._id)}
                 >
                   <h3 className="font-semibold text-xl mb-1 cursor-pointer">
-                    Dianne Russell
+                    {item?.FullName}
                   </h3>
-                  <p className="mb-4">Dianne Russell</p>
+                  <p className="mb-4">{item?.email}</p>
                 </div>
                 <div className="flex justify-between items-center space-x-4">
                   <Button
-                    // onClick={() => handleAccept(item?._id)}
+                    onClick={() => handleAccept(item?._id)}
                     className="w-full h-11 rounded-tl-xl rounded-br-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
                   >
                     Accept
                   </Button>
-                  <Button className="w-full h-11 rounded-tl-xl rounded-br-xl hover:!bg-[#185DDE] transition-colors hover:!text-white duration-300 !text-[#185DDE] hover:!border-none font-medium border !border-[#185DDE]">
+                  <Button
+                    onClick={() => handleDecline(item?._id)}
+                    className="w-full h-11 rounded-tl-xl rounded-br-xl hover:!bg-[#185DDE] transition-colors hover:!text-white duration-300 !text-[#185DDE] hover:!border-none font-medium border !border-[#185DDE]"
+                  >
                     Delete
                   </Button>
                 </div>
@@ -111,9 +110,10 @@ const DealerRequest = () => {
 
       <div className="p-5 sticky bottom-0 flex items-center bg-white justify-end">
         <Pagination
-          onChange={(value) => setCurrentPage(value)}
-          pageSize={data?.data?.meta?.limit}
-          total={data?.data?.meta?.total}
+          current={currentPage}
+          pageSize={pageSize}
+          onChange={(page) => setCurrentPage(page)}
+          total={totalReq}
         />
       </div>
     </PageWrapper>

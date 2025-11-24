@@ -1,64 +1,95 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ReuseSelect from "../Form/ReusableSelect";
 import TagItem from "./TagItem";
 import RButton from "../../../ui/RButton";
 import NotificationModal from "./NotificationModal";
 import { useTranslation } from "react-i18next";
+import { useGetCityQuery } from "../../../Redux/api/city/cityApi";
 
 const CustomerTopBar = () => {
-  const [regions, setRegions] = useState([]);
-  const [postcodes, setPostcodes] = useState([]);
+  const { data } = useGetCityQuery({ page: 1, limit: 100000 });
+
+  const allCities = useMemo(
+    () => data?.data?.attributes?.results || [],
+    [data]
+  );
+
+  const [selectedCity, setSelectedCity] = useState(null); // store selected city object
+  const [regions, setRegions] = useState([]); // city tags
+  const [postcodes, setPostcodes] = useState([]); // postal code tags
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
 
-  // Generic Add
+  // Generic Add (prevent duplicates)
   const addItem = (setter) => (value) => {
-    setter((prev) => [...prev, value]);
+    setter((prev) => {
+      if (!prev.includes(value)) {
+        return [...prev, value];
+      }
+      return prev; // do nothing if already exists
+    });
   };
 
-  // Generic Remove (by comparing value)
+  // Generic Remove
   const removeItem = (setter) => (target) => {
     setter((prev) => prev.filter((item) => item !== target));
   };
 
-  // Usage
-  const addRegion = addItem(setRegions);
+  // Add city
+  const addRegion = (cityName) => {
+    const cityObj = allCities.find((c) => c.cityName === cityName);
+    if (cityObj) {
+      setSelectedCity(cityObj); // set selected city for postal codes dropdown
+      addItem(setRegions)(cityName); // add city tag (no duplicates)
+    }
+  };
+
+  // Add postal code
   const addPostcode = addItem(setPostcodes);
 
-  const removeRegion = removeItem(setRegions);
+  // Remove city
+  const removeRegion = (region) => {
+    removeItem(setRegions)(region);
+    if (selectedCity?.cityName === region) {
+      setSelectedCity(null); // clear selected city if tag removed
+      setPostcodes([]); // clear postal codes
+    }
+  };
+
+  // Remove postal code
   const removePostcode = removeItem(setPostcodes);
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const handleCancel = () => setIsModalOpen(false);
 
   return (
     <div className="flex items-center justify-between my-10 px-6">
       <div className="flex gap-4 items-center">
         <div className="flex items-center gap-4">
+          {/* City Select */}
           <ReuseSelect
             placeholder={t("customers.selectRegion")}
             selectClassName="!w-[200px] !bg-transparent"
             onChange={addRegion}
-            options={[
-              { value: "north", label: "North" },
-              { value: "south", label: "South" },
-              { value: "east", label: "East" },
-              { value: "west", label: "West" },
-            ]}
+            options={allCities.map((city) => ({
+              value: city.cityName,
+              label: city.cityName,
+            }))}
             value={regions}
           />
 
+          {/* Postal Code Select */}
           <ReuseSelect
             placeholder={t("customers.selectPostCode")}
             selectClassName="!w-[200px] !bg-transparent"
             onChange={addPostcode}
-            options={[
-              { value: "52456", label: "52456" },
-              { value: "34548", label: "34548" },
-              { value: "1000", label: "1000" },
-              { value: "1100", label: "1100" },
-            ]}
+            options={
+              selectedCity
+                ? selectedCity.postalCode.map((code) => ({
+                    value: code,
+                    label: code,
+                  }))
+                : []
+            }
             value={postcodes}
           />
         </div>
@@ -66,7 +97,7 @@ const CustomerTopBar = () => {
         {/* Selected tags display */}
         <div className="flex flex-col gap-2 ">
           <div className="flex items-center justify-center gap-2">
-            {regions?.map((region) => (
+            {regions.map((region) => (
               <TagItem
                 key={region}
                 label={region}
@@ -77,7 +108,7 @@ const CustomerTopBar = () => {
 
           <div className="w-fit space-y-2">
             <div className="flex items-center justify-center gap-2">
-              {postcodes?.map((postcode) => (
+              {postcodes.map((postcode) => (
                 <TagItem
                   key={postcode}
                   label={postcode}
