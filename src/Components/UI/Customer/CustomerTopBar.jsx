@@ -129,6 +129,7 @@ const CustomerTopBar = () => {
       <NotificationModal
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
+        postcodes={postcodes}
       />
     </div>
   );

@@ -18,7 +18,7 @@ const TopBarCard = ({ className, image, count, title, imageClass }) => {
         </div>
         <div className="text-start">
           <p className=" text-[45px] text-[#1D242D] mb-1 font-semibold">
-            {count || "12,500"}
+            {count}
           </p>
           <p className="text-xl font-medium text-black">{title}</p>
         </div>

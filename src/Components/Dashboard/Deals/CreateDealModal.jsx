@@ -5,17 +5,18 @@ import {
   Form,
   Input,
   Modal,
-  Select,
   TimePicker,
   Button,
-  message,
+  Select,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
-import RButton from "../../../ui/RButton";
 import ReuseSelect from "../../UI/Form/ReusableSelect";
-import dayjs from "dayjs";
-import { useAddDealMutation } from "../../../Redux/api/deals/dealsApi";
+import {
+  useAddDealMutation,
+  useGetAllBusinessQuery,
+} from "../../../Redux/api/deals/dealsApi";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
 const dayOptions = [
   { value: "monday", label: "Monday" },
@@ -29,34 +30,45 @@ const dayOptions = [
 
 const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
   const [form] = Form.useForm();
+  const { data: businessData } = useGetAllBusinessQuery({});
+  const allBusinesses = businessData?.data?.attributes || [];
   const [addDeal] = useAddDealMutation();
 
   const [timeFrames, setTimeFrames] = useState([
     { day: null, startTime: null, endTime: null },
   ]);
-  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    console.log({ ...values, timeFrames });
     const activeTime = timeFrames
-      .filter((frame) => frame.day && frame.startTime && frame.endTime) // only valid frames
+      .filter((frame) => frame.day && frame.startTime && frame.endTime)
       .map((frame) => ({
-        day: frame.day.charAt(0).toUpperCase() + frame.day.slice(1), // Capitalize first letter
+        day: frame.day.charAt(0).toUpperCase() + frame.day.slice(1),
         startTime: frame.startTime.format("HH:mm"),
         endTime: frame.endTime.format("HH:mm"),
       }));
 
     const payload = {
-      business: values.businessName, // Replace with actual business ID if needed
+      business: values.businessName, // send selected business ID
       description: values.description || "",
       isActive: true,
-      benefitAmmount: values.benefitAmount || 0,
+      benefitAmmount: Number(values.benefitAmount) || 0,
       dealType: values.dealType || "",
-      reuseableAfter: values.reusableAfter || 0,
-      maxClaimCount: values.maxClaimCount || 1,
+      reuseableAfter: Number(values.reusableAfter) || 0,
+      maxClaimCount: Number(values.maxClaimCount) || 1,
       activeTime,
     };
-    handleCancel();
+
+    const res = await tryCatchWrapper(
+      addDeal,
+      { body: payload },
+      "Creating New Deal..."
+    );
+    console.log(res);
+
+    if (res?.statusCode === 201) {
+      form.resetFields();
+      handleCancel();
+    }
   };
 
   const handleAddTimeFrame = () => {
@@ -76,12 +88,6 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
     const updated = [...timeFrames];
     updated[index][field] = value;
     setTimeFrames(updated);
-  };
-
-  const validateTimeGap = (start, end) => {
-    if (!start || !end) return false;
-    const diffHours = end.diff(start, "hour", true);
-    return diffHours >= 4;
   };
 
   return (
@@ -105,6 +111,7 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
       >
         <Form
           layout="vertical"
+          form={form}
           className="bg-transparent w-full"
           onFinish={onFinish}
         >
@@ -114,27 +121,47 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
               <label className="text-base-color text-sm font-semibold block mb-2">
                 Business Name *
               </label>
+
               <Form.Item
                 name="businessName"
-                rules={[{ required: true, message: "Name is required" }]}
+                rules={[
+                  { required: true, message: "Please select a business" },
+                ]}
               >
-                <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C]" />
+                <Select
+                  showSearch
+                  placeholder="Select business"
+                  optionFilterProp="children" // search in option text
+                  className="!w-full !bg-transparent !h-10 !rounded"
+                  onChange={(value) =>
+                    form.setFieldsValue({ businessName: value })
+                  }
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().includes(input.toLowerCase())
+                  }
+                >
+                  {allBusinesses.map((business) => (
+                    <Select.Option key={business._id} value={business._id}>
+                      {business.name}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
             </div>
 
             <div className="w-full">
-              <ReuseSelect
-                value={null}
+              <label className="text-base-color text-sm font-semibold block mb-2">
+                Deal Type *
+              </label>
+              <Form.Item
+                value={form.getFieldValue("dealType") || null}
                 name="dealType"
-                selectClassName="!w-full !bg-transparent !h-10 !rounded"
-                labelClassName="!font-medium"
-                label="Deal Type *"
-                disabled={false}
-                options={[
-                  { value: "restaurant", label: "Restaurant" },
-                  { value: "activity", label: "Activity" },
-                ]}
-              />
+              >
+                <Input
+                  className="px-4 py-2 rounded bg-transparent border-[#0C0C0C]"
+                  rows={3}
+                />
+              </Form.Item>
             </div>
           </div>
 
@@ -180,33 +207,16 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
                   </label>
 
                   <ReuseSelect
-                    value={null}
+                    value={frame.day || null}
                     name="day"
                     selectClassName="!w-full !bg-transparent !h-10 !rounded"
                     labelClassName="!font-medium"
                     disabled={false}
-                    options={[
-                      { value: "monday", label: "Monday" },
-                      { value: "tuesday", label: "Tuesday" },
-                      { value: "wednesday", label: "Wednesday" },
-                      { value: "thursday", label: "Thursday" },
-                      { value: "friday", label: "Friday" },
-                      { value: "saturday", label: "Saturday" },
-                      { value: "sunday", label: "Sunday" },
-                    ]}
+                    options={dayOptions}
                     onChange={(value) =>
                       handleTimeFrameChange(index, "day", value)
                     }
                   />
-                  {/* <Select
-                    placeholder="Select day"
-                    options={dayOptions}
-                    value={frame.day}
-                    onChange={(value) =>
-                      handleTimeFrameChange(index, "day", value)
-                    }
-                    className="w-full"
-                  /> */}
                 </div>
 
                 {/* Start Time */}
@@ -281,14 +291,12 @@ const CreateDealModal = ({ handleCancel, isDealAddModalOpen }) => {
 
           {/* Submit */}
           <Form.Item>
-            <RButton
-              isLoading={loading}
-              loadingMessage="Creating..."
-              type={"submit"}
-              className="mt-5"
+            <Button
+              htmlType="submit"
+              className="mt-5 !text-white !bg-[#185DDE] !py-5 !w-full"
             >
-              Create Deal
-            </RButton>
+              <span className="!text-white">Create Deal</span>
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

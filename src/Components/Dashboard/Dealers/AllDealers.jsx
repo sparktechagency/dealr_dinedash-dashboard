@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { ConfigProvider, Pagination, Select } from "antd";
+import { Pagination } from "antd";
 import { useState } from "react";
-import { useGetAllRecipeQuery } from "../../../Redux/api/driver/recipe";
+// import { useGetAllRecipeQuery } from "../../../Redux/api/driver/recipe";
 import Bar_Chart from "../../Chart/BarChart";
 import DealerTable from "../../Tables/DealerTable";
 import PageWrapper from "../../UI/PageWrapper";
@@ -10,42 +10,15 @@ import DealerEditModal from "./DealerEditModal";
 import DealerViewModal from "./DealerViewModal";
 import { useGetAllUsersQuery } from "../../../Redux/api/user/userApi";
 import DealerUnblockModal from "./DealerUnblockModal";
-
-export const dealsRedeemedData = [
-  {
-    month: "The Rio Lounge",
-    uv: 2200,
-  },
-  {
-    month: "Lounge Comida",
-    uv: 2700,
-  },
-  {
-    month: "Chef’s Table",
-    uv: 4200,
-  },
-  {
-    month: "Pinewood Cafe",
-    uv: 4800,
-  },
-  {
-    month: "Yum Cha District",
-    uv: 2300,
-  },
-  {
-    month: "Izumi Japanese Ki...",
-    uv: 5100,
-  },
-  {
-    month: "Cafe de Ontario",
-    uv: 2600,
-  },
-];
+import { useMostPopularDealsQuery } from "../../../Redux/api/deals/dealsApi";
 
 const AllDealers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
+
+  const { data: popularDeals, isFetching: isFetchingDeals } =
+    useMostPopularDealsQuery({});
 
   const { data: users, isFetching } = useGetAllUsersQuery([
     { name: "role", value: "business" },
@@ -89,7 +62,7 @@ const AllDealers = () => {
           <p className="text-[#185DDE] font-semibold text-xl">
             Deals redeemed per Dealer
           </p>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <p className="font-medium">Short by Performance:</p>
             <ConfigProvider
               theme={{
@@ -118,9 +91,12 @@ const AllDealers = () => {
                 ]}
               />
             </ConfigProvider>
-          </div>
+          </div> */}
         </div>
-        <Bar_Chart barCharData={dealsRedeemedData} className="!h-96" />
+        <Bar_Chart
+          barCharData={popularDeals?.data?.attributes}
+          className="!h-96"
+        />
       </div>
 
       <div

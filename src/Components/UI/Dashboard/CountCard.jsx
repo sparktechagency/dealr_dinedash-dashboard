@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { cn } from "../../../utils/cn";
 
 const CountCard = ({ image, count, title, className, imageClass }) => {
@@ -19,7 +20,7 @@ const CountCard = ({ image, count, title, className, imageClass }) => {
           <p className="text-base lg:text-3xl text-[#1D242D] mb-1 font-semibold">
             {title}
           </p>
-          <p className="text-3xl text-[#185DDE]">{count || "12,500"}</p>
+          <p className="text-3xl text-[#185DDE]">{count}</p>
         </div>
       </div>
     </div>

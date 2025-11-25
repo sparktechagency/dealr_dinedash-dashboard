@@ -69,11 +69,13 @@ const AllDeals = () => {
           <EditDealModal
             editDealsModalOpen={editDealsModalOpen}
             handleCancel={handleCancel}
+            currentRecord={currentRecord}
           />
 
           <DeleteDealsModal
             deleteDealsModalOpen={deleteDealsModalOpen}
             handleCancel={handleCancel}
+            currentRecord={currentRecord}
           />
         </>
       ),
@@ -94,7 +96,19 @@ const AllDeals = () => {
           Deal Approval
         </span>
       ),
-      children: <DealApproval />,
+      children: (
+        <>
+          <DealApproval
+            setEditDealsModalOpen={setEditDealsModalOpen}
+            setCurrentRecord={setCurrentRecord}
+          />{" "}
+          <EditDealModal
+            editDealsModalOpen={editDealsModalOpen}
+            handleCancel={handleCancel}
+            currentRecord={currentRecord}
+          />
+        </>
+      ),
     },
     {
       key: "changeRequest",
@@ -112,7 +126,19 @@ const AllDeals = () => {
           Change Request
         </span>
       ),
-      children: <ChangeRequest />,
+      children: (
+        <>
+          <ChangeRequest
+            setEditDealsModalOpen={setEditDealsModalOpen}
+            setCurrentRecord={setCurrentRecord}
+          />{" "}
+          <EditDealModal
+            editDealsModalOpen={editDealsModalOpen}
+            handleCancel={handleCancel}
+            currentRecord={currentRecord}
+          />
+        </>
+      ),
     },
   ];
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   XAxis,
   YAxis,
@@ -9,80 +10,17 @@ import {
   Line,
 } from "recharts";
 
-const data = [
-  {
-    name: "Jan",
-    downloads: 650,
-    subscribers: 400,
-  },
-  {
-    name: "Feb",
-    downloads: 850,
-    subscribers: 600,
-  },
-  {
-    name: "Mar",
-    downloads: 500,
-    subscribers: 300,
-  },
-  {
-    name: "Apr",
-    downloads: 650,
-    subscribers: 400,
-  },
-  {
-    name: "May",
-    downloads: 354,
-    subscribers: 235,
-  },
-  {
-    name: "June",
-    downloads: 900,
-    subscribers: 700,
-  },
-  {
-    name: "July",
-    downloads: 650,
-    subscribers: 400,
-  },
-  {
-    name: "Aug",
-    downloads: 850,
-    subscribers: 600,
-  },
-  {
-    name: "Sep",
-    downloads: 500,
-    subscribers: 300,
-  },
-  {
-    name: "Oct",
-    downloads: 650,
-    subscribers: 400,
-  },
-  {
-    name: "Nov",
-    downloads: 354,
-    subscribers: 235,
-  },
-  {
-    name: "Dec",
-    downloads: 900,
-    subscribers: 700,
-  },
-];
-
-const Line_Chart = ({ isShow = true }) => {
+const Line_Chart = ({ allDownloads, isShow = true }) => {
   return (
     <div className="w-full h-96">
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={allDownloads}
           margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="1 1" />
           <XAxis
-            dataKey="name"
+            dataKey="month"
             tick={{ fill: "#185DDE", fontSize: 12, fontWeight: 500 }}
           />
           <YAxis
@@ -93,7 +31,7 @@ const Line_Chart = ({ isShow = true }) => {
           <Legend />
           <Line
             type="monotone"
-            dataKey="downloads"
+            dataKey="user"
             stroke="#0061ff"
             strokeWidth={6}
             dot={{ r: 5, stroke: "#0061ff", strokeWidth: 2, fill: "#ffffff" }}
@@ -103,7 +41,7 @@ const Line_Chart = ({ isShow = true }) => {
           {isShow && (
             <Line
               type="monotone"
-              dataKey="subscribers"
+              dataKey="subs"
               stroke="#a6c1ff"
               strokeWidth={6}
               dot={{ r: 5, stroke: "#a6c1ff", strokeWidth: 2, fill: "#ffffff" }}

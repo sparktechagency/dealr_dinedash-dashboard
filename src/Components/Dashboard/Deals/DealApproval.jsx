@@ -1,12 +1,21 @@
+/* eslint-disable react/prop-types */
 import { Button, Pagination } from "antd";
 import image from "../../../../public/images/deals.jpg";
-import { useAllPendingDealQuery } from "../../../Redux/api/deals/dealsApi";
+import {
+  useAllPendingDealQuery,
+  useApprovedDealMutation,
+  useDeclinedDealRequestMutation,
+} from "../../../Redux/api/deals/dealsApi";
 import { useState } from "react";
 import SpinLoader from "../../UI/SpinLoader";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
-const DealApproval = () => {
+const DealApproval = ({ setEditDealsModalOpen, setCurrentRecord }) => {
   const [page, setPage] = useState(1);
   const limit = 12;
+
+  const [approvedDeal] = useApprovedDealMutation();
+  const [declinedDeal] = useDeclinedDealRequestMutation();
 
   const { data, isFetching } = useAllPendingDealQuery({
     page,
@@ -23,6 +32,22 @@ const DealApproval = () => {
       </div>
     );
   }
+
+  const handleApprove = async (id) => {
+    await tryCatchWrapper(
+      approvedDeal,
+      { params: id },
+      "Updating Deal Request..."
+    );
+  };
+
+  const handleDecline = async (id) => {
+    await tryCatchWrapper(
+      declinedDeal,
+      { params: id },
+      "Deleting Deal Request..."
+    );
+  };
 
   return (
     <div className="relative">
@@ -87,13 +112,25 @@ const DealApproval = () => {
 
               {/* Action buttons */}
               <div className="flex flex-col gap-2 self-stretch justify-center">
-                <Button className="bg-[#185DDE] h-10 rounded-2xl hover:!bg-[#185ddea3] !text-white">
+                <Button
+                  onClick={() => {
+                    setEditDealsModalOpen(true);
+                    setCurrentRecord(item);
+                  }}
+                  className="bg-[#185DDE] h-10 rounded-2xl hover:!bg-[#185ddea3] !text-white"
+                >
                   Edit
                 </Button>
-                <Button className="bg-[#16A34A] h-10 rounded-2xl hover:!bg-[#16a34a90] !text-white">
+                <Button
+                  onClick={() => handleApprove(item?._id)}
+                  className="bg-[#16A34A] h-10 rounded-2xl hover:!bg-[#16a34a90] !text-white"
+                >
                   Approve
                 </Button>
-                <Button className="bg-[#DC2626] h-10 rounded-2xl hover:!bg-[#dc262690] !text-white">
+                <Button
+                  onClick={() => handleDecline(item?._id)}
+                  className="bg-[#DC2626] h-10 rounded-2xl hover:!bg-[#dc262690] !text-white"
+                >
                   Reject
                 </Button>
               </div>

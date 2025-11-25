@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { cn } from "../../utils/cn";
 
-const Bar_Chart = ({ barCharData, className }) => {
+const GrowthChart = ({ barCharData, className }) => {
   const yAxisTickFormatter = (value) => `${value / 1000}K`;
   const tickStyle = { fill: "#185DDE", fontSize: 12 };
 
@@ -24,7 +24,7 @@ const Bar_Chart = ({ barCharData, className }) => {
           barCategoryGap={20}
         >
           <XAxis
-            dataKey="dealType"
+            dataKey="month"
             tick={{ ...tickStyle }}
             tickMargin={6}
             axisLine={false}
@@ -41,22 +41,22 @@ const Bar_Chart = ({ barCharData, className }) => {
             tickMargin={16}
           />
           {/* Optional horizontal grid lines */}
-          <ReferenceLine y={1000} stroke="#185DDE" strokeWidth={0.4} />
-          <ReferenceLine y={2000} stroke="#185DDE" strokeWidth={0.4} />
-          <ReferenceLine y={3000} stroke="#185DDE" strokeWidth={0.4} />
-          <ReferenceLine y={4000} stroke="#185DDE" strokeWidth={0.4} />
-          <ReferenceLine y={5000} stroke="#185DDE" strokeWidth={0.4} />
+          <ReferenceLine y={100} stroke="#185DDE" strokeWidth={0.4} />
+          <ReferenceLine y={200} stroke="#185DDE" strokeWidth={0.4} />
+          <ReferenceLine y={300} stroke="#185DDE" strokeWidth={0.4} />
+          <ReferenceLine y={400} stroke="#185DDE" strokeWidth={0.4} />
+          <ReferenceLine y={500} stroke="#185DDE" strokeWidth={0.4} />
 
           <Tooltip
             formatter={(value) => `${value}`}
             cursor={{ fill: "#185DDE", opacity: 0.1 }}
           />
 
-          <Bar dataKey="redeemCount" barSize={30} radius={[50, 50, 50, 50]}>
+          <Bar dataKey="user" barSize={30} radius={[50, 50, 50, 50]}>
             {barCharData?.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.redeemCount ? "#185DDE" : "#F87171"} // fallback if value is 0 or undefined
+                fill={entry.user ? "#185DDE" : "#F87171"} // fallback if value is 0 or undefined
               />
             ))}
           </Bar>
@@ -66,4 +66,4 @@ const Bar_Chart = ({ barCharData, className }) => {
   );
 };
 
-export default Bar_Chart;
+export default GrowthChart;

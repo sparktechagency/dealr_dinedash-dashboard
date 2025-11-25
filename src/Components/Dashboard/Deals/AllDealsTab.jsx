@@ -93,7 +93,7 @@ const AllDealsTab = ({
                   <Button
                     onClick={() => {
                       setDeleteDealsModalOpen(true);
-                      setCurrentRecord({});
+                      setCurrentRecord(item);
                     }}
                     className="p-1"
                   >
@@ -154,10 +154,10 @@ const AllDealsTab = ({
                 </div>
 
                 {/* Bottom Info */}
-                <div className="flex justify-between items-center mt-4 border-t p-4">
+                <div className="flex justify-between items-center mt-4 border-t p-4 gap-4">
                   <div className="flex items-center gap-1">
                     <MdOutlineAvTimer className="text-[#1d4ed8] size-8" />
-                    <div className="flex flex-col text-sm text-gray-600">
+                    <div className="flex flex-col text-sm text-gray-600 text-nowrap">
                       <strong>Reusable After</strong>
                       <p>{item?.reusableAfter}</p>
                     </div>

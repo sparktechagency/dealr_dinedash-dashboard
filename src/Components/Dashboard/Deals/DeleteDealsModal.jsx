@@ -1,6 +1,28 @@
+/* eslint-disable react/prop-types */
 import { Modal } from "antd";
+import { useDeleteDealMutation } from "../../../Redux/api/deals/dealsApi";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
-const DeleteDealsModal = ({ deleteDealsModalOpen, handleCancel }) => {
+const DeleteDealsModal = ({
+  deleteDealsModalOpen,
+  handleCancel,
+  currentRecord,
+}) => {
+  console.log(currentRecord);
+  const [deleteDeals] = useDeleteDealMutation();
+
+  const handleDelete = async () => {
+    // Implement delete logic here, possibly using currentRecord._id
+    const res = await tryCatchWrapper(
+      deleteDeals,
+      { params: currentRecord?._id },
+      "Deleting City..."
+    );
+
+    if (res?.statusCode === 201) {
+      handleCancel();
+    }
+  };
   return (
     <Modal
       open={deleteDealsModalOpen}
@@ -10,7 +32,7 @@ const DeleteDealsModal = ({ deleteDealsModalOpen, handleCancel }) => {
     >
       <div className="mt-8">
         <p className="text-2xl font-medium text-center">
-          Do you want to block this Customer?
+          Do you want to Delete this Deal?
         </p>
         <div className="flex gap-10 px-8 mt-6">
           {/* Cancel Button */}
@@ -22,8 +44,11 @@ const DeleteDealsModal = ({ deleteDealsModalOpen, handleCancel }) => {
           </button>
 
           {/* Yes Button */}
-          <button className="px-5 h-11 w-full rounded-xl bg-[#CE0000] text-white hover:bg-[#CE0000]">
-            Block
+          <button
+            onClick={handleDelete}
+            className="px-5 h-11 w-full rounded-xl bg-[#CE0000] text-white hover:bg-[#CE0000]"
+          >
+            Delete
           </button>
         </div>
       </div>
