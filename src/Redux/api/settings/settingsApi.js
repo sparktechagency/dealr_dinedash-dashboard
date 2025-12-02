@@ -9,7 +9,23 @@ const settingsApi = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
+    getAllStaticContent: builder.query({
+      query: () => ({
+        url: `/static_content`,
+        method: "GET",
+      }),
+    }),
+    getAllNotifications: builder.query({
+      query: () => ({
+        url: `/notifications/notification-adminend`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateStaticContentMutation } = settingsApi;
+export const {
+  useCreateStaticContentMutation,
+  useGetAllStaticContentQuery,
+  useGetAllNotificationsQuery,
+} = settingsApi;

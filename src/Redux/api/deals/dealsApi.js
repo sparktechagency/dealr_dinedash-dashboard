@@ -108,15 +108,15 @@ const dealsApi = baseApi.injectEndpoints({
     }),
     approvedChangeRequest: build.mutation({
       query: (req) => ({
-        url: `/deal/approve-change-req/${req?.params}`,
-        method: "PUT",
+        url: `/deal/deal-req-approve/${req?.params}`,
+        method: "PATCH",
       }),
       invalidatesTags: [tagTypes.city],
     }),
     declinedChangeRequest: build.mutation({
       query: (req) => ({
-        url: `/deal/decline-change-req/${req?.params}`,
-        method: "DELETE",
+        url: `/deal/reject-change/${req?.params}`,
+        method: "PATCH",
       }),
       invalidatesTags: [tagTypes.city],
     }),

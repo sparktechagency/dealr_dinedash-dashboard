@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { tagTypesList } from "./tagTypes";
-import { getFromLocalStorage } from "../../utils/local-storage";
 import { baseUrl } from "../../constant/baseUrl";
 import Cookies from "js-cookie";
 
@@ -9,17 +8,17 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `${baseUrl}/api/v1`,
   prepareHeaders: (headers) => {
     const token = Cookies.get("dealr_accessToken");
-    const resetPasswordToken = getFromLocalStorage("resetPasswordToken");
-    const forgotPasswordToken = getFromLocalStorage("forgotPasswordToken");
+    const forgetPasswordToken = Cookies.get("dealr_forget_password_token");
+    const resetPasswordToken = Cookies.get("dealr_resetPasswordToken");
 
     if (token) headers.set("authorization", `Bearer ${token}`);
-    if (forgotPasswordToken)
-      headers.set(
-        "authorization",
-        `forgotPasswordToken ${forgotPasswordToken}`
-      );
-    if (resetPasswordToken)
-      headers.set("authorization", `resetPasswordToken ${resetPasswordToken}`);
+    if (forgetPasswordToken) {
+      headers.set("SignUpToken", `signUpToken ${forgetPasswordToken}`);
+    }
+
+    if (resetPasswordToken) {
+      headers.set("Forget-password", `Forget-password ${resetPasswordToken}`);
+    }
 
     return headers;
   },

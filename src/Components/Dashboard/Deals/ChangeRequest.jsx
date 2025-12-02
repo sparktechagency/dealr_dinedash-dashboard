@@ -83,7 +83,9 @@ const ChangeRequest = () => {
                     {/* 🔹 Deal Edit Request + Pending Badge */}
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs font-medium text-gray-800">
-                        Deal Edit Request
+                        {item?.isDeleteReq
+                          ? "Deal DeleteRequest"
+                          : "Deal Edit Request"}
                       </span>
                       <span className="inline-block bg-yellow-400 text-white text-xs px-2 py-0.5 rounded-full font-medium">
                         Pending

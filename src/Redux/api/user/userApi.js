@@ -103,7 +103,7 @@ const userApi = baseApi.injectEndpoints({
         });
 
         return {
-          url: `/notification`,
+          url: `/notifications/notification-adminend`,
           method: "GET",
           params: params,
         };

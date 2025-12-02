@@ -2,18 +2,17 @@ import { Form, Input } from "antd";
 
 import { GoArrowLeft } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { AllImages } from "../../../public/images/AllImages";
-// import { useForgotPasswordMutation } from "../../Redux/api/auth/authApi";
+import { useForgetPasswordMutation } from "../../Redux/api/auth/authApi";
 import RButton from "../../ui/RButton";
-import { setToLocalStorage } from "../../utils/local-storage";
 import useUserData from "../../hooks/useUserData";
 import { useEffect } from "react";
+import tryCatchWrapper from "../../utils/tryCatchWrapper";
+import Cookies from "js-cookie";
 
 const ForgotPassword = () => {
+  const [form] = Form.useForm();
   const navigate = useNavigate();
-
-  // const [forgetPassword, { isLoading }] = useForgotPasswordMutation();
 
   const handleBack = () => {
     navigate(-1); // Goes back to the previous page
@@ -26,23 +25,32 @@ const ForgotPassword = () => {
       navigate("/", { replace: true });
     }
   }, [navigate, userExist]);
+  const [forgetPassword] = useForgetPasswordMutation();
+
   const onFinish = async (values) => {
-    // const toastId = toast.loading("Requesting...");
-    // try {
-    //   const res = await forgetPassword(values).unwrap();
-    //   toast.success(res.message, {
-    //     id: toastId,
-    //     duration: 2000,
-    //   });
-    //   setToLocalStorage("forgotPasswordToken", res?.data?.forgotPasswordToken);
-    //   navigate("/verify-otp");
-    // } catch (error) {
-    //   toast.error(error?.data?.message || "An error occurred during Login", {
-    //     id: toastId,
-    //     duration: 2000,
-    //   });
-    // }
+    const res = await tryCatchWrapper(
+      forgetPassword,
+      {
+        body: values,
+      },
+      "Forgoting Password..."
+    );
+
+    if (res?.statusCode === 200) {
+      Cookies.set("dealr_forget_password_token", res?.data?.attributes, {
+        path: "/",
+        expires: 1,
+      });
+      Cookies.set("dealr_email", values.email, {
+        path: "/",
+        expires: 1,
+      });
+      Cookies.remove("dealr_is_resend");
+      form.resetFields();
+      navigate("/forgot-password/verify-otp");
+    }
   };
+
   return (
     <div className="bg-[#B7CDF5]">
       <div className="lg:w-[1100px] mx-auto flex justify-center items-center h-[100vh] lg:px-5 px-10">

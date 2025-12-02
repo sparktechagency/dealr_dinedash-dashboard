@@ -1,13 +1,5 @@
 import { BarsOutlined, BellOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  Badge,
-  Button,
-  ConfigProvider,
-  Dropdown,
-  Grid,
-  Menu,
-  Typography,
-} from "antd";
+import { Button, ConfigProvider, Dropdown, Grid, Menu, Typography } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -19,74 +11,24 @@ import i18n from "../../utils/i18n";
 // import user from "/images/user.png";
 
 const { useBreakpoint } = Grid;
-export const notificationData = [
-  {
-    _id: "1",
-    message: "New user registration: Alice Johnson",
-    createdAt: "2025-07-10T09:00:00Z",
-  },
-  {
-    _id: "2",
-    message: "Monthly report is ready for download.",
-    createdAt: "2025-07-09T15:30:00Z",
-  },
-  {
-    _id: "3",
-    message: "You have a new support ticket assigned.",
-    createdAt: "2025-07-08T12:00:00Z",
-  },
-  {
-    _id: "4",
-    message: "System maintenance scheduled for Sunday.",
-    createdAt: "2025-07-07T18:45:00Z",
-  },
-  {
-    _id: "5",
-    message: "Password changed successfully.",
-    createdAt: "2025-07-06T22:10:00Z",
-  },
-  {
-    _id: "6",
-    message: "Reminder: Team meeting tomorrow at 10 AM.",
-    createdAt: "2025-07-06T08:00:00Z",
-  },
-  {
-    _id: "7",
-    message: "2 new files uploaded by HR Department.",
-    createdAt: "2025-07-05T14:25:00Z",
-  },
-  {
-    _id: "8",
-    message: "Your profile was updated successfully.",
-    createdAt: "2025-07-04T11:15:00Z",
-  },
-  {
-    _id: "9",
-    message: "Subscription will expire in 3 days.",
-    createdAt: "2025-07-03T17:00:00Z",
-  },
-  {
-    _id: "10",
-    message: "New comment on your task by Daniel.",
-    createdAt: "2025-07-02T19:40:00Z",
-  },
-];
+
 // eslint-disable-next-line react/prop-types
 const Topbar = ({ collapsed, setCollapsed }) => {
   const [currentPage] = useState(1);
   const [pageSize] = useState(10);
   const { t } = useTranslation();
 
-  const { data, isLoading } = useGetAllNotificationsQuery([
-    { name: "limit", value: pageSize },
-    { name: "page", value: currentPage },
-  ]);
-
-  const notification = data?.data?.result;
-
-  const [notificationCount, setNotificationCount] = useState(
-    notification?.length
+  const { data, isLoading, refetch } = useGetAllNotificationsQuery(
+    [
+      { name: "limit", value: pageSize },
+      { name: "page", value: currentPage },
+    ],
+    {
+      refetchOnMountOrArgChange: open,
+    }
   );
+
+  const notification = data?.data?.attributes?.notification;
 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -100,15 +42,16 @@ const Topbar = ({ collapsed, setCollapsed }) => {
     }
   }, [screens, setCollapsed]);
 
-  const handleMenuClick = () => {
-    setNotificationCount(0);
-  };
-
   const handleDropdownVisibleChange = (visible) => {
     setDropdownVisible(visible);
+
+    if (visible) {
+      refetch(); // 🔥 this will refetch notifications
+    }
   };
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
+    localStorage.setItem("dealr-lang", lng); // ⭐ save it
   };
 
   const languageMenu = (
@@ -127,16 +70,13 @@ const Topbar = ({ collapsed, setCollapsed }) => {
   }
 
   const notificationMenu = (
-    <div
-      onClick={handleMenuClick}
-      className="w-80 p-4 max-h-min bg-white rounded-lg shadow-lg border lg:h-[650px] overflow-hidden overflow-y-auto scrollbar"
-    >
+    <div className="w-80 p-4 max-h-min bg-white rounded-lg shadow-lg border lg:h-[650px] overflow-hidden overflow-y-auto scrollbar">
       <p className="text-2xl font-semibold mb-2 text-center text-[#185DDE] pb-2 border-b border-[#185DDE]">
         Notifications
       </p>
-      {notificationData?.map((notification) => (
+      {notification?.map((not) => (
         <div
-          key={notification._id}
+          key={not._id}
           className="flex items-center gap-2 py-2 border-b border-[#B7CDF5] last:border-b-0"
         >
           <BellOutlined
@@ -153,16 +93,16 @@ const Topbar = ({ collapsed, setCollapsed }) => {
             }}
           />
           <div className="flex flex-col items-start">
-            <p>{notification.message}</p>
+            <p>{i18n.language === "de" ? not.message?.de : not.message?.en}</p>
             <p className="text-gray-400 text-sm">
-              {moment(notification.createdAt).fromNow()}
+              {moment(not.createdAt).fromNow()}
             </p>
           </div>
         </div>
       ))}
       <div className="text-center mt-4">
         <Link
-          to="/notifications"
+          to="/admin/notifications"
           className="bg-[#185DDE] text-white hover:text-gray-200 px-4 py-2 rounded inline-block"
         >
           See More
@@ -206,18 +146,16 @@ const Topbar = ({ collapsed, setCollapsed }) => {
           >
             <Dropdown
               overlay={notificationMenu}
-              trigger={["click"]}
+              trigger={["hover"]}
               placement="bottomRight"
               onOpenChange={handleDropdownVisibleChange}
               open={isDropdownVisible}
             >
-              <Badge count={notificationCount} size="small">
-                <BellOutlined
-                  shape="circle"
-                  size="small"
-                  className="text-xl font-bold text-[#185DDE]"
-                />
-              </Badge>
+              <BellOutlined
+                shape="circle"
+                size="small"
+                className="text-xl font-bold text-[#185DDE]"
+              />
             </Dropdown>
           </ConfigProvider>
         </div>

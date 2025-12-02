@@ -72,7 +72,7 @@ const router = createBrowserRouter([
         element: <ForgotPassword />,
       },
       {
-        path: "verify-otp",
+        path: "forgot-password/verify-otp",
         element: <OtpPage />,
       },
       {

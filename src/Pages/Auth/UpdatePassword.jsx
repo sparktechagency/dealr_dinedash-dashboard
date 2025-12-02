@@ -6,8 +6,12 @@ import { AllImages } from "../../../public/images/AllImages";
 import RButton from "../../ui/RButton";
 import { useEffect } from "react";
 import useUserData from "../../hooks/useUserData";
+import { useResetPasswordMutation } from "../../Redux/api/auth/authApi";
+import tryCatchWrapper from "../../utils/tryCatchWrapper";
+import Cookies from "js-cookie";
 
 const ChangePassword = () => {
+  const [form] = Form.useForm();
   const navigate = useNavigate();
   const userExist = useUserData();
 
@@ -17,48 +21,24 @@ const ChangePassword = () => {
     }
   }, [navigate, userExist]);
 
-  // const [resetPassword, { isLoading }] = useResetPasswordMutation();
-
-  // let token = localStorage.getItem("resetPasswordToken");
-
-  // const { user } = jwtDecode(token);
-
-  // useEffect(() => {
-  //   if (!user && !token) {
-  //     navigate("/forget-password");
-  //   }
-  // }, [navigate, user, token]);
+  const [resetPassword] = useResetPasswordMutation();
 
   const onFinish = async (values) => {
-    // const toastId = toast.loading("Updating Password...");
-    // const value = {
-    //   password: values.password,
-    //   confirmPassword: values.confirmPassword,
-    // };
-    // try {
-    //   const res = await resetPassword(value).unwrap();
-    //   toast.success(res.message, {
-    //     id: toastId,
-    //     duration: 2000,
-    //   });
-    //   setTimeout(() => {
-    //     localStorage.removeItem("forgotPasswordToken");
-    //   }, 2000);
-    //   setTimeout(() => {
-    //     localStorage.removeItem("resetPasswordToken");
-    //   }, 2000);
-    //   navigate("/signin");
-    // } catch (error) {
-    //   toast.error(
-    //     error?.data?.message ||
-    //       error?.message ||
-    //       "An error occurred during Login",
-    //     {
-    //       id: toastId,
-    //       duration: 2000,
-    //     }
-    //   );
-    // }
+    const res = await tryCatchWrapper(
+      resetPassword,
+      {
+        body: {
+          password: values.confirmPassword,
+        },
+      },
+      "Resetting Password..."
+    );
+
+    if (res?.statusCode === 200) {
+      Cookies.remove("dealr_resetPasswordToken");
+      form.resetFields();
+      navigate("/sign-in");
+    }
   };
 
   return (

@@ -7,7 +7,6 @@ import { useGetAllNotificationsQuery } from "../../Redux/api/user/userApi";
 import Spinner from "../Shared/Spinner";
 import moment from "moment";
 import { Pagination } from "antd";
-import { notificationData } from "../Shared/Topbar";
 
 const Notifications = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +16,10 @@ const Notifications = () => {
     { name: "page", value: currentPage },
   ]);
 
-  const notification = data?.data?.result;
+  const notification = data?.data?.attributes?.notification;
+
+  const savedLang = localStorage.getItem("dealr-lang") || "de";
+  console.log(savedLang);
 
   if (isLoading) {
     return <Spinner />;
@@ -32,9 +34,9 @@ const Notifications = () => {
         <h1 className="text-3xl font-bold text-primary-color">Notification</h1>
       </div>
       <div className="px-4 sm:px-6 md:px-8 ">
-        {notificationData?.map((notification) => (
+        {notification?.map((not) => (
           <div
-            key={notification._id}
+            key={not._id}
             className="flex items-center space-x-3 p-2 border-b border-gray-300 last:border-none"
           >
             {/* Icon */}
@@ -42,13 +44,13 @@ const Notifications = () => {
               <FiBell className="text-white w-6 h-6" />
             </div>
 
-            {/* Notification text */}
+            {/* not text */}
             <div className="flex flex-col">
               <span className="text-lg font-medium text-gray-700">
-                {notification.message}
+                {savedLang === "de" ? not.message?.de : not.message?.en}
               </span>
               <span className="text-sm text-gray-500">
-                {moment(notification.createdAt).format("MMM Do YY")}
+                {moment(not.createdAt).format("MMM Do YY")}
               </span>
             </div>
           </div>

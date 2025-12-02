@@ -1,12 +1,17 @@
 import { Form } from "antd";
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { AllImages, AuthImages } from "../../../public/images/AllImages";
+import { useNavigate } from "react-router-dom";
+
+import { AllImages } from "../../../public/images/AllImages";
 import RButton from "../../ui/RButton";
 import useUserData from "../../hooks/useUserData";
+import tryCatchWrapper from "../../utils/tryCatchWrapper";
+import {
+  useForgetOtpVerifyMutation,
+  useResendForgetOTPMutation,
+} from "../../Redux/api/auth/authApi";
+import Cookies from "js-cookie";
 
 const OtpPage = () => {
   const [otp, setOtp] = useState("");
@@ -18,49 +23,89 @@ const OtpPage = () => {
       navigate("/", { replace: true });
     }
   }, [navigate, userExist]);
-  // const [forgotOtpVerification, { isLoading }] =
-  //   useForgotOtpVerificationMutation();
-  // const navigate = useNavigate();
-  // let token = localStorage.getItem("forgotPasswordToken");
-  // const { user } = jwtDecode(token);
+  const [otpMatch] = useForgetOtpVerifyMutation();
+  // const [otpMatchAfterResend] = useForgetOtpVerifyAfterResendMutation();
+  const [resendOtp] = useResendForgetOTPMutation();
+  const email = Cookies.get("dealr_email");
+  const resend = Cookies.get("dealr_is_resend");
 
-  // useEffect(() => {
-  //   console.log(user, "decodeToken");
-  //   if (!token) {
-  //     navigate("/forgot-password");
-  //   }
-  // }, [navigate, token, user]);
-
-  const onFinish = async () => {
-    // const toastId = toast.loading("Verifying...");
-    // if (otp.length < 6) {
-    //   toast.error("The OTP must be 6 digits long", {
-    //     id: toastId,
-    //     duration: 2000,
-    //   });
-    // } else {
-    //   // const data = {
-    //   //   email: user.email,
-    //   //   otp: Number(otp),
-    //   // };
-    //   try {
-    //     // const res = await forgotOtpVerification(data).unwrap();
-    //     toast.success("Email verified successfully", {
-    //       id: toastId,
-    //       duration: 2000,
-    //     });
-    //     // localStorage.setItem(
-    //     //   "resetPasswordToken",
-    //     //   res.data?.resetPasswordToken
-    //     // );
-    //     navigate("/update-password");
-    //   } catch (error) {
-    //     toast.error(error?.data?.message || "An error occurred during login", {
-    //       id: toastId,
-    //       duration: 3000,
-    //     });
+  const handleOTPSubmit = async () => {
+    // if (resend) {
+    //   if (otp.length === 6) {
+    //     const res = await tryCatchWrapper(
+    //       otpMatchAfterResend,
+    //       {
+    //         body: {
+    //           otp: otp,
+    //         },
+    //       },
+    //       "Verifying..."
+    //     );
+    //     if (res?.statusCode === 200) {
+    //       setOtp("");
+    //       Cookies.set(
+    //         "dealr_resetPasswordToken",
+    //         res?.data?.forgetPasswordToken,
+    //         {
+    //           path: "/",
+    //           expires: 1,
+    //         }
+    //       );
+    //       Cookies.remove("dealr_is_resend");
+    //       Cookies.remove("dealr_email");
+    //       Cookies.remove("dealr_forget_password_token");
+    //       navigate("/update-password");
+    //     }
     //   }
+    // } else {
+    if (otp.length === 4) {
+      const res = await tryCatchWrapper(
+        otpMatch,
+        {
+          body: {
+            otp: otp,
+
+            purpose: resend ? "resend-otp" : "forget-password",
+          },
+        },
+        "Verifying..."
+      );
+      if (res?.statusCode === 200) {
+        setOtp("");
+        Cookies.set(
+          "dealr_resetPasswordToken",
+          res?.data?.forgetPasswordToken,
+          {
+            path: "/",
+            expires: 1,
+          }
+        );
+        Cookies.remove("dealr_is_resend");
+        Cookies.remove("dealr_email");
+        Cookies.remove("dealr_forget_password_token");
+        navigate("/update-password");
+      }
+    }
     // }
+  };
+
+  const handleResendOtp = async () => {
+    const res = await tryCatchWrapper(
+      resendOtp,
+      {
+        body: {
+          email,
+        },
+      },
+      "Sending OTP..."
+    );
+
+    if (res?.statusCode === 200) {
+      Cookies.set("dealr_is_resend", "true", {
+        path: "/",
+        expires: 1,
+      });
+    }
   };
 
   return (
@@ -83,7 +128,7 @@ const OtpPage = () => {
                 </h1>
                 <p className="lg:text-xl text-base mb-3 lg:w-[450px]">
                   Please check your email. We have sent a code to contact
-                  @gmail.com
+                  {email}.
                 </p>
               </div>
             </div>
@@ -92,7 +137,7 @@ const OtpPage = () => {
             <Form
               layout="vertical"
               className="bg-transparent w-full"
-              onFinish={onFinish}
+              onFinish={handleOTPSubmit}
             >
               <Form.Item className="">
                 <div className="flex justify-start items-center">
@@ -100,19 +145,19 @@ const OtpPage = () => {
                     inputStyle="!size-12 flex rounded-xl bg-transparent border mr-4 border-[#185DDE] focus:border-[#185DDE] focus:shadow-none"
                     value={otp}
                     onChange={setOtp}
-                    numInputs={6}
+                    numInputs={4}
                     renderInput={(props) => <input {...props} required />}
                   />
                 </div>
               </Form.Item>
               <div className="flex justify-between py-1">
                 <p>Didn’t receive code?</p>
-                <Link
-                  href="/otp-verification"
+                <div
+                  onClick={handleResendOtp}
                   className="!underline font-semibold"
                 >
                   Resend
-                </Link>
+                </div>
               </div>
 
               <Form.Item>
