@@ -18,7 +18,7 @@ import UsersTable from "../Tables/UsersTable";
 import Line_Chart from "../Chart/LineChart";
 import Area_Chart from "../Chart/AreaChart";
 import { useTranslation } from "react-i18next";
-import CountCard from "../UI/Dashboard/CountCard.Jsx";
+import CountCard from "../UI/CountCard.jsx";
 import GrowthChart from "../Chart/GrowthChart";
 
 const Dashboard = () => {

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { cn } from "../../../utils/cn";
+import { cn } from "../../utils/cn";
 
 const CountCard = ({ image, count, title, className, imageClass }) => {
   return (
