@@ -1,4 +1,5 @@
 export const baseUrl = import.meta.env.VITE_BASE_URL;
+export const googleMapsApiKey = import.meta.env.VITE_PUBLIC_GOOGLE_MAP_API_KEY;
 export const countryCodes = [
   { label: "+1", value: "US", flag: "https://flagcdn.com/w320/us.png" },
   { label: "+1", value: "CA", flag: "https://flagcdn.com/w320/ca.png" },

@@ -37,6 +37,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import CategoryProtectedRoute from "./CategoryProtectedRoute"; // new wrapper
 import Cookies from "js-cookie";
 import { decodedToken } from "../../utils/jwt";
+import PromotionPage from "../Dashboard/Promotion/PromotionPage";
 
 const token = Cookies.get("dealr_accessToken");
 const currentUser = decodedToken(token);
@@ -236,6 +237,10 @@ const router = createBrowserRouter([
           {
             path: "category",
             element: <Category />,
+          },
+          {
+            path: "promotion",
+            element: <PromotionPage />,
           },
           {
             path: "blogs",

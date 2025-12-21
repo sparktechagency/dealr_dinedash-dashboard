@@ -216,6 +216,23 @@ const DashboardLayout = () => {
       ),
       label: <NavLink to="earning">{t("sidebar.earnings")}</NavLink>,
     },
+    {
+      key: "promotion",
+      icon: (
+        <img
+          src={category}
+          alt="promotion"
+          width={16}
+          height={16}
+          style={{
+            filter: location.pathname.includes("promotion")
+              ? "brightness(0) invert(1)"
+              : undefined,
+          }}
+        />
+      ),
+      label: <NavLink to="promotion">{t("sidebar.promotions")}</NavLink>,
+    },
 
     {
       key: "employees",

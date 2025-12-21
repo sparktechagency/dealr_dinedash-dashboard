@@ -4,11 +4,15 @@ import TextArea from "antd/es/input/TextArea";
 import ReuseSelect from "../../UI/Form/ReusableSelect";
 import { useAddPotentialDealerMutation } from "../../../Redux/api/potentialDealer/potentialDealerApi";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import BusinessNameWithGoogleApi from "./BusinessNameWithGoogleApi";
+import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
   const [form] = Form.useForm();
   const [addPotentialDealer] = useAddPotentialDealerMutation();
+  const [isVerfiying, setIsVerfiying] = useState(false);
+
   const onFinish = async (values) => {
     const payload = {
       businessName: values.businessName,
@@ -63,12 +67,16 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
               <label className="text-base-color text-sm font-semibold block mb-2">
                 Dealer Name
               </label>
-              <Form.Item
+              <BusinessNameWithGoogleApi
+                form={form}
+                setIsVerfiying={setIsVerfiying}
+              />
+              {/* <Form.Item
                 name="businessName"
                 rules={[{ required: true, message: "Name is Required" }]}
               >
                 <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] ..." />
-              </Form.Item>
+              </Form.Item> */}
             </div>
 
             <div className="w-full">
@@ -128,7 +136,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
               Address
             </label>
             <Form.Item
-              name="email"
+              name="detialsAddress"
               className="text-base-color text-base font-medium"
             >
               <Input className="px-4 py-2 rounded bg-transparent border-[#0C0C0C] hover:border-[#185DDE] focus:border-[#0C0C0C] focus:outline-none" />
@@ -155,7 +163,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
               Comments
             </label>
             <Form.Item
-              name="email"
+              name="comments"
               className="text-base-color text-base font-medium"
             >
               <TextArea
@@ -166,7 +174,7 @@ const DealerAddModal = ({ isDealerAddModalOpen, setIsDealerAddModalOpen }) => {
           </div>
           <Form.Item>
             <RButton
-              isLoading={false}
+              isLoading={!isVerfiying}
               loadingMessage="Add Dealer"
               type={"submit"}
               className="mt-5"

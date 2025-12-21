@@ -32,6 +32,13 @@ const potentialDealerApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.potentialDealer],
     }),
+    makeDealerFromPotential: build.mutation({
+      query: (req) => ({
+        url: `/potentialdealer/make-communication-dealer/${req?.params}`,
+        method: "PUT",
+      }),
+      invalidatesTags: [tagTypes.potentialDealer, tagTypes.user],
+    }),
     getPotentialDealer: build.query({
       query: ({ page = 1, limit = 100000 }) => {
         return {
@@ -48,6 +55,13 @@ const potentialDealerApi = baseApi.injectEndpoints({
     getAllCommunicatrionStatus: build.query({
       query: () => ({
         url: `/communicatrion/count`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.potentialDealer],
+    }),
+    getCommunicationById: build.query({
+      query: (id) => ({
+        url: `/communicatrion/by-pdealerId/${id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.potentialDealer],
@@ -74,8 +88,10 @@ export const {
   useAddCommunicatrionMutation,
   useGetCommunicatrionQuery,
   useAddPotentialDealerMutation,
+  useMakeDealerFromPotentialMutation,
   useGetPotentialDealerQuery,
   useGetAllCommunicatrionStatusQuery,
+  useGetCommunicationByIdQuery,
 } = potentialDealerApi;
 
 export default potentialDealerApi;

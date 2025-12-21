@@ -4,14 +4,13 @@ import PageWrapper from "../../UI/PageWrapper";
 import Communications from "./Communications";
 import DealerAddModal from "./DealerAddModal";
 import Dealers from "./Dealers";
-import Overview from "./Overview";
 
 const tabColors = ["#1d4ed8", "#1d4ed8", "#1d4ed8", "#1d4ed8"]; // Blue, Green, Amber, Violet
 
-const tabKeys = ["overview", "dealers", "communications"];
+const tabKeys = ["dealers", "communications"];
 
 const PotentialsDealer = () => {
-  const [activeKey, setActiveKey] = useState("overview");
+  const [activeKey, setActiveKey] = useState("dealers");
 
   const [isDealerAddModalOpen, setIsDealerAddModalOpen] = useState(false);
 
@@ -21,24 +20,6 @@ const PotentialsDealer = () => {
   };
 
   const items = [
-    {
-      key: "overview",
-      label: (
-        <span
-          className="custom-tab"
-          style={{
-            backgroundColor:
-              activeKey === "overview"
-                ? getTabColor("overview")
-                : "transparent",
-            color: activeKey === "overview" ? "#fff" : "#000",
-          }}
-        >
-          Overview
-        </span>
-      ),
-      children: <Overview />,
-    },
     {
       key: "dealers",
       label: (

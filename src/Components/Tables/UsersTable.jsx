@@ -246,7 +246,7 @@ const UsersTable = ({ data, loading, page, pageSize }) => {
               {t("modalMessage.customerDetails")}
             </Title>
             <Text type="secondary">
-              {t("modalMessage.seeAll")} {modal?.user?.name}
+              {t("modalMessage.seeAll")} {modal?.user?.fullName}
             </Text>
 
             <div>
@@ -271,7 +271,7 @@ const UsersTable = ({ data, loading, page, pageSize }) => {
 
               <div className="flex gap-x-6">
                 <Text>{t("view.name")}:</Text>
-                <Text>{modal.user.name}</Text>
+                <Text>{modal.user.fullName}</Text>
               </div>
               <div className="flex gap-x-6">
                 <Text>{t("view.email")}:</Text>

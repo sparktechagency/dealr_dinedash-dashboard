@@ -1,64 +1,65 @@
 {
-    "dashboardCard": {
-        "count": "Dashboard Count",
-        "activeSubcription": "Active Subcriptions",
-        "subscriptionRevenue": "Subscription Revenue",
-        "conversationRate": "Conversion Rate",
-        "churnRate": "Churn Rate",
-        "activeUsers": "Active Users",
-        "downloadsvsSubscriptions": "Downloads vs Subscriptions",
-        "growthTrends": "Growth Trends",
-        "downloads": "Downloads",
-        "subscribers": "Subscribers",
-        "yeartoDatePerformance": "Year to Date Performance",
-        "recentUsers": "Recent Users"
-    },
-    "modalMessage": {
-        "block": "Do you want to block this Customer?",
-        "cancel": "Cancel",
-        "unblock": "Do you want to Unblock this Customer?",
-        "blockButton": "Block",
-        "customerDetails": "Customer Details",
-        "seeAll": "See all details about",
-        "userInfo": "User Information"
-    },
-    "view": {
-        "serialNumber": "Serial Number",
-        "name": "Name",
-        "email": "Email",
-        "phone": "Phone",
-        "joiningDate": "Joining Date",
-        "postCode": "Post Code",
-        "premiumAccess": "Give Premium Access",
-        "makeThisCustomerAsDealer": "Make this Customer as Dealer"
-    },
-    "sidebar": {
-        "dashboard": "Dashboard",
-        "users": "Users",
-        "customers": "Customers",
-        "dealers": "Dealers",
-        "allDealers": "All Dealers",
-        "dealerRequest": "Dealer Request",
-        "potentialsDealer": "Potentials Dealers",
-        "deals": "Deals",
-        "allDeals": "All Deals",
-        "dealsAnalytics": "Deals Analytics",
-        "cities": "Cities",
-        "earnings": "Earnings",
-        "subscription": "Subscription",
-        "employees": "Employees",
-        "profile": "Profile",
-        "settings": "Settings",
-        "logout": "Logout"
-    },
-    "customers": {
-        "customerList": "Customer List",
-        "sendNotification": "Send notifications to filtered list",
-        "selectRegion": "Select Region",
-        "selectPostCode": "Select Post Code"
-    },
-    "language": {
-        "en": "English",
-        "fr": "Français"
-    }
+  "dashboardCard": {
+    "count": "Dashboard Count",
+    "activeSubcription": "Active Subcriptions",
+    "subscriptionRevenue": "Subscription Revenue",
+    "conversationRate": "Conversion Rate",
+    "churnRate": "Churn Rate",
+    "activeUsers": "Active Users",
+    "downloadsvsSubscriptions": "Downloads vs Subscriptions",
+    "growthTrends": "Growth Trends",
+    "downloads": "Downloads",
+    "subscribers": "Subscribers",
+    "yeartoDatePerformance": "Year to Date Performance",
+    "recentUsers": "Recent Users"
+  },
+  "modalMessage": {
+    "block": "Do you want to block this Customer?",
+    "cancel": "Cancel",
+    "unblock": "Do you want to Unblock this Customer?",
+    "blockButton": "Block",
+    "customerDetails": "Customer Details",
+    "seeAll": "See all details about",
+    "userInfo": "User Information"
+  },
+  "view": {
+    "serialNumber": "Serial Number",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "joiningDate": "Joining Date",
+    "postCode": "Post Code",
+    "premiumAccess": "Give Premium Access",
+    "makeThisCustomerAsDealer": "Make this Customer as Dealer"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "customers": "Customers",
+    "dealers": "Dealers",
+    "allDealers": "All Dealers",
+    "dealerRequest": "Dealer Request",
+    "potentialsDealer": "Potentials Dealers",
+    "deals": "Deals",
+    "allDeals": "All Deals",
+    "dealsAnalytics": "Deals Analytics",
+    "cities": "Cities",
+    "earnings": "Earnings",
+    "subscription": "Subscription",
+    "promotions": "Promotions",
+    "employees": "Employees",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "customers": {
+    "customerList": "Customer List",
+    "sendNotification": "Send notifications to filtered list",
+    "selectRegion": "Select Region",
+    "selectPostCode": "Select Post Code"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français"
+  }
 }

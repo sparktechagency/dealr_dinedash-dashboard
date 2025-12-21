@@ -11,7 +11,7 @@ const CreateADealer = ({ isModalOpen, setIsCustomerADealer, currentUser }) => {
       {
         params: record?._id,
       },
-      "Blocking..."
+      "Making Customer a Dealer..."
     );
     if (res?.statusCode === 200) {
       setIsCustomerADealer(false);

@@ -1,11 +1,37 @@
 import { Button, Card, Space, Typography } from "antd";
-import { useGetPotentialDealerQuery } from "../../../Redux/api/potentialDealer/potentialDealerApi";
+import {
+  useGetPotentialDealerQuery,
+  useMakeDealerFromPotentialMutation,
+} from "../../../Redux/api/potentialDealer/potentialDealerApi";
 import SpinLoader from "../../UI/SpinLoader";
+import { useState } from "react";
+import DealersAllComunicationModal from "./DealersAllComunicationModal";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 const { Title } = Typography;
 
 const Dealers = () => {
+  const [makeDealer] = useMakeDealerFromPotentialMutation();
+  const [isShowCommunicationModal, setIsShowCommunicationModal] =
+    useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null);
+
+  const showCommunicationModal = (record) => {
+    setIsShowCommunicationModal(true);
+    setCurrentRecord(record);
+    console.log("record", record);
+  };
+
+  const handleCancel = () => {
+    setIsShowCommunicationModal(false);
+    setCurrentRecord(null);
+  };
+
   const { data, isFetching } = useGetPotentialDealerQuery({});
   const potentialDealers = data?.data?.attributes?.result || [];
+
+  const onFinish = async (id) => {
+    await tryCatchWrapper(makeDealer, { params: id }, "Creating New Dealer...");
+  };
 
   if (isFetching)
     return (
@@ -28,9 +54,9 @@ const Dealers = () => {
         size="middle"
         style={{ display: "flex", marginTop: 16 }}
       >
-        {potentialDealers.map((dealer) => (
+        {potentialDealers?.map((dealer) => (
           <Card
-            key={dealer._id}
+            key={dealer?._id}
             className="border border-[#B6B6B6]"
             style={{ borderRadius: 8 }}
           >
@@ -39,22 +65,22 @@ const Dealers = () => {
                 <div>
                   <div className="flex items-center gap-x-4 mb-3">
                     <p className="text-2xl font-medium">
-                      {dealer.businessName}
+                      {dealer?.businessName}
                     </p>
                     <p
                       className="px-2 py-1 rounded-full text-sm font-medium"
                       style={{
                         backgroundColor:
-                          dealer.acquisitionStatus === "Negotiating"
+                          dealer?.acquisitionStatus === "Negotiating"
                             ? "#FFDF00"
                             : "#90EE90",
                         color:
-                          dealer.acquisitionStatus === "Negotiating"
+                          dealer?.acquisitionStatus === "Negotiating"
                             ? "#735900"
                             : "#056608",
                       }}
                     >
-                      {dealer.acquisitionStatus}
+                      {dealer?.acquisitionStatus}
                     </p>
                   </div>
 
@@ -83,7 +109,7 @@ const Dealers = () => {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        <span>{dealer.email}</span>
+                        <span>{dealer?.email}</span>
                       </p>
 
                       <p className="text-lg flex items-center gap-x-2">
@@ -169,22 +195,38 @@ const Dealers = () => {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        <span>{dealer.website}</span>
+                        <span>{dealer?.website}</span>
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-lg mt-4">{dealer.comments}</p>
+                  <p className="text-lg mt-4">{dealer?.comments}</p>
                 </div>
 
-                <Button className="h-9 px-6 bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium rounded-full">
-                  Make Dealer
-                </Button>
+                <div className="flex flex-col gap-5">
+                  <Button
+                    onClick={() => showCommunicationModal(dealer)}
+                    className="h-9 px-6 bg-transparent !text-[#185DDE] transition-colors duration-300 border !border-[#185DDE] font-medium rounded-full"
+                  >
+                    See Details
+                  </Button>
+                  <Button
+                    onClick={() => onFinish(dealer?._id)}
+                    className="h-9 px-6 bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium rounded-full"
+                  >
+                    Make Dealer
+                  </Button>
+                </div>
               </div>
             </div>
           </Card>
         ))}
       </Space>
+      <DealersAllComunicationModal
+        isModalOpen={isShowCommunicationModal}
+        handleCancel={handleCancel}
+        currentRecord={currentRecord}
+      />
     </div>
   );
 };

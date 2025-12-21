@@ -95,3 +95,7 @@ div#rc-tabs-1-panel-dealers {
 .ant-tabs-content-holder {
   width: 100% !important;
 }
+
+.pac-container {
+  z-index: 100000 !important;
+}
