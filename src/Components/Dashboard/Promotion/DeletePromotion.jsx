@@ -1,24 +1,26 @@
 /* eslint-disable react/prop-types */
 import { Modal } from "antd";
+import { useDeletePromotionMutation } from "../../../Redux/api/promotion/promotionApi";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 
 const DeletePromotion = ({
   deletePromotionModal,
   handleCancel,
   currentRecord,
 }) => {
-  // const [DeletePromotion] = useDeletePromotionMutation();
+  const [DeletePromotion] = useDeletePromotionMutation();
 
   const handleDelete = async () => {
     console.log(currentRecord);
     // Implement delete logic here, possibly using currentRecord._id
-    // const res = await tryCatchWrapper(
-    //   DeletePromotion,
-    //   { params: currentRecord?._id },
-    //   "Deleting City..."
-    // );
-    // if (res?.statusCode === 201) {
-    //   handleCancel();
-    // }
+    const res = await tryCatchWrapper(
+      DeletePromotion,
+      { params: currentRecord?._id },
+      "Deleting..."
+    );
+    if (res?.statusCode === 201) {
+      handleCancel();
+    }
   };
   return (
     <Modal

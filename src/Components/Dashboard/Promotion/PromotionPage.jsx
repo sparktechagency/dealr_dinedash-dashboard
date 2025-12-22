@@ -7,21 +7,15 @@ import PageWrapper from "../../UI/PageWrapper";
 import AddPromotion from "./AddPromotion";
 import EditPromotion from "./EditPromotion";
 import DeletePromotion from "./DeletePromotion";
-import { AllImages } from "../../../../public/images/AllImages";
+import { useGetPromotionQuery } from "../../../Redux/api/promotion/promotionApi";
+import { baseUrl } from "../../../constant/baseUrl";
 
 const PromotionPage = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
+  const { data, isFetching } = useGetPromotionQuery({ page, limit });
 
-  const allCities = [
-    {
-      _id: "1",
-      promotionType: "Coupon",
-      subject: ["Summer Sale", "Winter Sale"],
-      imageNote: AllImages.PDFImage,
-    },
-  ];
-  const totalCities = 0;
+  const allPromotion = data?.data?.attributes || [];
 
   const [addPromotionModal, setAddPromotionModal] = useState(false);
   const [editPromotionModal, setEditPromotionModal] = useState(false);
@@ -45,25 +39,36 @@ const PromotionPage = () => {
     },
     {
       title: "Promition Type",
-      dataIndex: "promotionType",
-      key: "promotionType",
+      dataIndex: "type",
+      key: "type",
+      align: "center",
+    },
+    {
+      title: "Promition Code",
+      dataIndex: "couponCode",
+      key: "couponCode",
       align: "center",
     },
     {
       title: "Subject",
       dataIndex: "subject",
       key: "subject",
-      render: (postalCode) => postalCode?.join(", "),
+    },
+    {
+      title: "Promition Code",
+      dataIndex: "discount",
+      key: "discount",
+      render: (discount) => `${discount ? discount + "%" : "N/A"} `,
       align: "center",
     },
     {
       title: "Image/Note",
-      dataIndex: "imageNote",
-      key: "imageNote",
+      dataIndex: "image",
+      key: "image",
       align: "center",
-      render: (imageNote) => (
+      render: (image) => (
         <img
-          src={imageNote}
+          src={baseUrl + image}
           alt="imageNote"
           className="w-full h-20 object-contain mx-auto"
         />
@@ -126,8 +131,8 @@ const PromotionPage = () => {
       <div>
         <Table
           columns={columns}
-          dataSource={allCities}
-          loading={false}
+          dataSource={allPromotion}
+          loading={isFetching}
           pagination={false}
           rowKey="_id"
           scroll={{ x: true }}
@@ -138,7 +143,7 @@ const PromotionPage = () => {
         <Pagination
           current={page}
           onChange={(page) => setPage(page)}
-          total={totalCities}
+          total={allPromotion?.length || 0}
           pageSize={limit}
           className="flex justify-end "
         />

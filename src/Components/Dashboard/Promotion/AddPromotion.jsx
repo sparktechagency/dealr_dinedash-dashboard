@@ -3,37 +3,52 @@ import { ConfigProvider, Form, Input, Modal, Select, Upload } from "antd";
 import RButton from "../../../ui/RButton";
 import { useEffect } from "react";
 import { RxUpload } from "react-icons/rx";
+import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useAddPromotionMutation } from "../../../Redux/api/promotion/promotionApi";
 
 const AddPromotion = ({ addPromotionModal, handleCancel }) => {
+  const [add] = useAddPromotionMutation();
   const [form] = Form.useForm();
-  const type = Form.useWatch("promotionType", form);
+  const type = Form.useWatch("type", form);
 
   console.log(type);
 
   // Always load with minimum 1 field
   useEffect(() => {
-    if (!form.getFieldValue("postalCode")) {
-      form.setFieldsValue({ postalCode: [""] });
-    }
+    form.setFieldsValue({
+      type: "normal",
+    });
   }, [form]);
 
   const onFinish = async (values) => {
     console.log(values);
-    // const payload = {
-    //   cityName: values.cityName,
-    //   postalCode: values.postalCode || [],
-    // };
-    // const res = await tryCatchWrapper(
-    //   AddPromotion,
-    //   { body: payload },
-    //   "Creating New City..."
-    // );
-    // console.log(res);
 
-    // if (res?.statusCode === 201) {
-    //   form.resetFields();
-    //   handleCancel();
-    // }
+    const formData = new FormData();
+
+    const payload = {
+      type: values.type,
+      subject: values.subject,
+      couponCode: values.couponCode,
+      discount: values.discount,
+    };
+
+    formData.append("data", JSON.stringify(payload));
+
+    if (values.image.file.originFileObj) {
+      formData.append("image", values.image.file.originFileObj);
+    }
+
+    const res = await tryCatchWrapper(
+      add,
+      { body: formData },
+      "Creating New Promotion..."
+    );
+    console.log(res);
+
+    if (res?.statusCode === 201) {
+      form.resetFields();
+      handleCancel();
+    }
   };
 
   return (
@@ -67,7 +82,7 @@ const AddPromotion = ({ addPromotionModal, handleCancel }) => {
                 Promotion Type
               </label>
               <Form.Item
-                name="promotionType"
+                name="type"
                 rules={[
                   {
                     required: true,
@@ -76,10 +91,11 @@ const AddPromotion = ({ addPromotionModal, handleCancel }) => {
                 ]}
               >
                 <Select
-                  className=" rounded-xl !border-[#000] !bg-transparent hover:border-[#000] focus:border-[#000] min-h-12"
+                  className=" rounded-xl !border-[#000] !bg-transparent hover:border-[#000] focus:border-[#000] min-h-9"
+                  selectedValue={type}
                   options={[
-                    { value: "Normal", label: "Normal" },
-                    { value: "Coupon ", label: "Coupon" },
+                    { value: "normal", label: "Normal" },
+                    { value: "coupon", label: "Coupon" },
                   ]}
                 />
               </Form.Item>
@@ -101,7 +117,23 @@ const AddPromotion = ({ addPromotionModal, handleCancel }) => {
                 <Input className="px-4 py-2 rounded-xl border-[#000] !bg-transparent hover:border-[#000] focus:border-[#000]" />
               </Form.Item>
             </div>
-            {type !== "Normal" && (
+            <div>
+              <label className="text-base-color text-sm font-semibold block mb-2">
+                Coupon Code
+              </label>
+              <Form.Item
+                name="couponCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Coupon Code is required",
+                  },
+                ]}
+              >
+                <Input className="px-4 py-2 rounded-xl border-[#000] !bg-transparent hover:border-[#000] focus:border-[#000]" />
+              </Form.Item>
+            </div>
+            {type !== "normal" && (
               <div>
                 <label className="text-base-color text-sm font-semibold block mb-2">
                   Discount %
@@ -155,7 +187,7 @@ const AddPromotion = ({ addPromotionModal, handleCancel }) => {
               </Upload>
             </Form.Item>
 
-            <RButton type="submit" loadingMessage="Add City" />
+            <RButton type="submit" loadingMessage="Add Promotion" />
           </Form>
         </div>
       </Modal>

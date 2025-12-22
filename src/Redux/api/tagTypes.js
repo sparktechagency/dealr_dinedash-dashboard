@@ -5,6 +5,7 @@ export const tagTypes = {
   employee: "employee",
   profile: "profile",
   potentialDealer: "potentialDealer",
+  promotion: "promotion",
 };
 
 export const tagTypesList = [
@@ -14,4 +15,5 @@ export const tagTypesList = [
   tagTypes.profile,
   tagTypes.city,
   tagTypes.potentialDealer,
+  tagTypes.promotion,
 ];

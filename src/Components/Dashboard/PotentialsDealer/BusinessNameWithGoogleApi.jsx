@@ -59,7 +59,7 @@ export default function BusinessNameWithGoogleApi({ form, setIsVerfiying }) {
       // ✅ cleanup listener
       if (listener) listener.remove();
     };
-  }, [isLoaded, form]);
+  }, [isLoaded, form, setIsVerfiying]);
 
   if (!isLoaded) return <p>Loading Google...</p>;
 
