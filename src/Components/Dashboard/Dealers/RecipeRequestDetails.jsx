@@ -10,10 +10,12 @@ import {
 } from "../../../Redux/api/user/userApi";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 import { baseUrl } from "../../../constant/baseUrl";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
 const RecipeRequestDetails = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -55,7 +57,10 @@ const RecipeRequestDetails = () => {
     return <Spinner />;
   }
   return (
-    <PageWrapper pageTitle="Dealer Request Details " className="!h-screen">
+    <PageWrapper
+      pageTitle={t("dealerRequest.dealerRequestDetails")}
+      className="!h-screen"
+    >
       <div
         // key={index}
         className="rounded-[20px] flex flex-col justify-between w-fit py-6"
@@ -81,13 +86,13 @@ const RecipeRequestDetails = () => {
                 onClick={() => handleAccept(userData?._id)}
                 className="w-full h-11 rounded-tl-xl rounded-br-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
               >
-                Accept
+                {t("dealerRequest.dealerAccept")}
               </Button>
               <Button
                 onClick={() => handleDecline(userData?._id)}
                 className="w-full h-11 rounded-tl-xl rounded-br-xl hover:!bg-[#185DDE] transition-colors hover:!text-white duration-300 !text-[#185DDE] hover:!border-none font-medium border !border-[#185DDE]"
               >
-                Delete
+                {t("dealerRequest.dealerDelete")}
               </Button>
             </div>
           </div>

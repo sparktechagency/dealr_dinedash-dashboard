@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useCreateStaticContentMutation } from "../../../Redux/api/settings/settingsApi";
 import { toast } from "sonner";
 import Spinner from "../../Shared/Spinner";
+import { useTranslation } from "react-i18next";
 
 const TermsOfService = () => {
+  const { t } = useTranslation();
+
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const navigate = useNavigate();
@@ -55,7 +58,9 @@ const TermsOfService = () => {
             className="text-lg cursor-pointer"
             onClick={handleGoBack}
           />
-          <h1 className="text-3xl font-medium py-4">Terms Of Service</h1>
+          <h1 className="text-3xl font-medium py-4">
+            {t("profile.termsAndPolicies")}
+          </h1>
         </div>
         <div className="">
           <JoditEditor

@@ -11,6 +11,7 @@ import {
 } from "../../../Redux/api/user/userApi";
 import { baseUrl } from "../../../constant/baseUrl";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useTranslation } from "react-i18next";
 
 const DealerRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -19,6 +20,8 @@ const DealerRequest = () => {
   const [pageSize] = useState(12);
   const [acceptReq] = useAcceptDealerRequestMutation();
   const [declineReq] = useDeclineDealerRequestMutation();
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -62,7 +65,7 @@ const DealerRequest = () => {
   }
 
   return (
-    <PageWrapper pageTitle="Dealer Request" isSearch={false}>
+    <PageWrapper pageTitle={t("dealerRequest.dealerRequests")} isSearch={false}>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-10 mt-6 ">
         {allReq?.map((item, index) => (
           <div
@@ -84,7 +87,7 @@ const DealerRequest = () => {
                   onClick={() => handleTitleClick(item?._id)}
                 >
                   <h3 className="font-semibold text-xl mb-1 cursor-pointer">
-                    {item?.FullName}
+                    {item?.fullName}
                   </h3>
                   <p className="mb-4">{item?.email}</p>
                 </div>
@@ -93,13 +96,13 @@ const DealerRequest = () => {
                     onClick={() => handleAccept(item?._id)}
                     className="w-full h-11 rounded-tl-xl rounded-br-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
                   >
-                    Accept
+                    {t("dealerRequest.dealerAccept")}
                   </Button>
                   <Button
                     onClick={() => handleDecline(item?._id)}
                     className="w-full h-11 rounded-tl-xl rounded-br-xl hover:!bg-[#185DDE] transition-colors hover:!text-white duration-300 !text-[#185DDE] hover:!border-none font-medium border !border-[#185DDE]"
                   >
-                    Delete
+                    {t("dealerRequest.dealerDelete")}
                   </Button>
                 </div>
               </div>

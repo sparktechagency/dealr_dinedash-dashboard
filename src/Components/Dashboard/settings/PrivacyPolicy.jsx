@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useCreateStaticContentMutation } from "../../../Redux/api/settings/settingsApi";
 import Spinner from "../../Shared/Spinner";
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy = () => {
+  const { t } = useTranslation();
+
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const navigate = useNavigate();
@@ -53,7 +56,9 @@ const PrivacyPolicy = () => {
             className="text-lg cursor-pointer"
             onClick={handleGoBack}
           />
-          <h1 className="text-3xl font-medium py-4">Privacy Policy</h1>
+          <h1 className="text-3xl font-medium py-4">
+            {t("profile.privacyPolicy")}
+          </h1>
         </div>
         <div className="">
           <JoditEditor

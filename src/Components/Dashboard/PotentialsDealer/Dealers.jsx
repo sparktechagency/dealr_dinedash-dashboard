@@ -7,9 +7,11 @@ import SpinLoader from "../../UI/SpinLoader";
 import { useState } from "react";
 import DealersAllComunicationModal from "./DealersAllComunicationModal";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useTranslation } from "react-i18next";
 const { Title } = Typography;
 
 const Dealers = () => {
+  const { t } = useTranslation();
   const [makeDealer] = useMakeDealerFromPotentialMutation();
   const [isShowCommunicationModal, setIsShowCommunicationModal] =
     useState(false);
@@ -44,9 +46,9 @@ const Dealers = () => {
       style={{ boxShadow: "1px 1px 11px -5px black" }}
       className="p-6 rounded-xl mt-3 border border-[#B6B6B6] w-[76vw]"
     >
-      <Title level={2}>Dealer Directory</Title>
+      <Title level={2}>{t("potentialsDealer.dealerDirectory")}</Title>
       <p className="text-lg font-normal">
-        Manage your potential dealer relationships
+        {t("potentialsDealer.manageYourPotentialDealerRelationships")}
       </p>
 
       <Space
@@ -208,13 +210,13 @@ const Dealers = () => {
                     onClick={() => showCommunicationModal(dealer)}
                     className="h-9 px-6 bg-transparent !text-[#185DDE] transition-colors duration-300 border !border-[#185DDE] font-medium rounded-full"
                   >
-                    See Details
+                    {t("potentialsDealer.seeDetails")}
                   </Button>
                   <Button
                     onClick={() => onFinish(dealer?._id)}
                     className="h-9 px-6 bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium rounded-full"
                   >
-                    Make Dealer
+                    {t("potentialsDealer.makeDealer")}
                   </Button>
                 </div>
               </div>

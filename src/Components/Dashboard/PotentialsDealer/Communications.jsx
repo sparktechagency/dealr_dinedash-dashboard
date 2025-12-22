@@ -7,11 +7,14 @@ import {
   useGetPotentialDealerQuery,
 } from "../../../Redux/api/potentialDealer/potentialDealerApi";
 import SpinLoader from "../../UI/SpinLoader";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const Communications = () => {
+  const { t } = useTranslation();
+
   const { data, isFetching } = useGetPotentialDealerQuery({});
   const potentialDealers = data?.data?.attributes?.result || [];
 
@@ -51,8 +54,10 @@ const Communications = () => {
         style={{ boxShadow: "1px 1px 11px -5px black" }}
         className="p-6 rounded-xl mt-3 border border-[#B6B6B6]  w-[77vw]"
       >
-        <Title level={2}>Recent Communications</Title>
-        <p className="text-lg font-normal">Latest dealer interactions</p>
+        <Title level={2}>{t("potentialsDealer.communication")}</Title>
+        <p className="text-lg font-normal">
+          {t("potentialsDealer.manageYourPotentialDealerRelationships")}
+        </p>
 
         <div className="px-6 py-8">
           <Form
@@ -136,7 +141,7 @@ const Communications = () => {
             <Form.Item>
               <RButton
                 isLoading={false}
-                loadingMessage="Add Communication Log"
+                loadingMessage={t("potentialsDealer.dddCommunicationLog")}
                 type="submit"
                 className="mt-5"
               />

@@ -4,8 +4,11 @@ import EarningTable from "../Tables/EarningTable";
 import ViewEarningModal from "../UI/ViewEarningModal";
 import { Pagination } from "antd";
 import { useGetTransactionQuery } from "../../Redux/api/transaction/transactionApi.js";
+import { useTranslation } from "react-i18next";
 
 export default function Earning() {
+  const { t } = useTranslation();
+
   //* It's Use to Show Modal
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [currentRecord, setCurrentRecord] = useState(null);
@@ -36,7 +39,7 @@ export default function Earning() {
     <div className="min-h-[90vh]">
       <div className="bg-[#FFFFFF] rounded-xl border-2 border-[#185DDE]">
         <h1 className="text-3xl font-medium rounded-t-lg p-5  bg-[#185DDE] text-white">
-          Earning
+          {t("earning.earning")}
         </h1>
 
         <div className="p-6">
@@ -44,12 +47,12 @@ export default function Earning() {
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <div className="flex items-center justify-center gap-3 bg-[#185DDE] text-primary-color py-3 lg:w-[300px] rounded-xl">
                 <LuArrowLeftRight className="text-xl" />
-                <h1 className="text-lg">Today’s Earning</h1>
+                <h1 className="text-lg">{t("earning.todaysEarning")}</h1>
                 <h1>${todaysEarnings || 0}</h1>
               </div>
               <div className="flex items-center justify-center gap-3 bg-[#185DDE] text-primary-color py-3 lg:w-[300px] rounded-xl">
                 <LuArrowLeftRight className="text-xl" />
-                <h1 className="text-lg">All Earning</h1>
+                <h1 className="text-lg">{t("earning.allEarnings")}</h1>
                 <h1>${totalAllEarnings || 0}</h1>
               </div>
             </div>

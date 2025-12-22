@@ -7,12 +7,14 @@ import DealApproval from "./DealApproval";
 import CreateDealModal from "./CreateDealModal";
 import EditDealModal from "./EditDealModal";
 import DeleteDealsModal from "./DeleteDealsModal";
+import { useTranslation } from "react-i18next";
 
 const tabColors = ["#1d4ed8", "#1d4ed8", "#1d4ed8", "#1d4ed8"]; // Blue, Green, Amber, Violet
 
 const tabKeys = ["allDeals", "dealApproval", "changeRequest"];
 
 const AllDeals = () => {
+  const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState("allDeals");
 
   const [isDealAddModalOpen, setIsDealAddModalOpen] = useState(false);
@@ -46,7 +48,7 @@ const AllDeals = () => {
             color: activeKey === "allDeals" ? "#fff" : "#000",
           }}
         >
-          All Deals
+          {t("deals.allDeals")}
         </span>
       ),
       children: (
@@ -93,7 +95,7 @@ const AllDeals = () => {
             color: activeKey === "dealApproval" ? "#fff" : "#000",
           }}
         >
-          Deal Approval
+          {t("deals.dealApproval")}
         </span>
       ),
       children: (
@@ -123,7 +125,7 @@ const AllDeals = () => {
             color: activeKey === "changeRequest" ? "#fff" : "#000",
           }}
         >
-          Change Request
+          {t("deals.changeRequest")}
         </span>
       ),
       children: (
@@ -143,7 +145,7 @@ const AllDeals = () => {
   ];
 
   return (
-    <PageWrapper pageTitle="All Deals">
+    <PageWrapper pageTitle={t("deals.allDeals")}>
       <div className="relative">
         <div className="tabs-wrapper py-5">
           <ConfigProvider
@@ -188,7 +190,7 @@ const AllDeals = () => {
                   fill="white"
                 />
               </svg>
-              Create New Deal
+              {t("deals.createNewDeal")}
             </Button>
           </div>
         )}

@@ -4,12 +4,14 @@ import PageWrapper from "../../UI/PageWrapper";
 import Communications from "./Communications";
 import DealerAddModal from "./DealerAddModal";
 import Dealers from "./Dealers";
+import { useTranslation } from "react-i18next";
 
 const tabColors = ["#1d4ed8", "#1d4ed8", "#1d4ed8", "#1d4ed8"]; // Blue, Green, Amber, Violet
 
 const tabKeys = ["dealers", "communications"];
 
 const PotentialsDealer = () => {
+  const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState("dealers");
 
   const [isDealerAddModalOpen, setIsDealerAddModalOpen] = useState(false);
@@ -31,7 +33,7 @@ const PotentialsDealer = () => {
             color: activeKey === "dealers" ? "#fff" : "#000",
           }}
         >
-          Dealers
+          {t("potentialsDealer.dealers")}
         </span>
       ),
       children: <Dealers />,
@@ -49,7 +51,7 @@ const PotentialsDealer = () => {
             color: activeKey === "communications" ? "#fff" : "#000",
           }}
         >
-          Communications
+          {t("potentialsDealer.communication")}
         </span>
       ),
       children: <Communications />,
@@ -59,7 +61,7 @@ const PotentialsDealer = () => {
   return (
     <PageWrapper
       isSearch={false}
-      pageTitle="Potentials Dealer"
+      pageTitle={t("potentialsDealer.potentialsDealer")}
       className="w-full"
     >
       <div className="relative">

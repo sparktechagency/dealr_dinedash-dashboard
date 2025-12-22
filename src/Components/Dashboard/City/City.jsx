@@ -8,8 +8,11 @@ import DeleteCity from "./DeleteCity";
 import AddCity from "./AddCity";
 import EditCity from "./EditCity";
 import { useGetCityQuery } from "../../../Redux/api/city/cityApi";
+import { useTranslation } from "react-i18next";
 
 const City = () => {
+  const { t } = useTranslation();
+
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -100,14 +103,14 @@ const City = () => {
   ];
 
   return (
-    <PageWrapper pageTitle="Cities" isSearch={false}>
+    <PageWrapper pageTitle={t("cities.cities")} isSearch={false}>
       <div className="py-6">
         <Button
           onClick={() => setAddCityModal(true)}
           className="w-full h-10 rounded-lg bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
         >
           <HiOutlinePlusCircle className="text-xl" />
-          Add City
+          {t("cities.addNewCity")}
         </Button>
       </div>
 

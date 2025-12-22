@@ -58,6 +58,78 @@
     "selectRegion": "Region auswhlen",
     "selectPostCode": "Postleitzahl auswahlen"
   },
+  "dealersList": {
+    "dealersList": "Händlerliste",
+    "deals_redeemed_per_Dealer": "Angebote, die pro Händler eingelöst wurden",
+    "approveDealer": "Diesen Händler genehmigen",
+    "rejectDealer": "Diesen Händler ablehnen",
+    "dealerDetails": "Händlerdetails"
+  },
+  "dealerRequest": {
+    "dealerRequests": "Händleranfragen",
+    "dealerRequestDetails": "Details zur Händleranfrage",
+    "dealerDelete": "Löschen",
+    "dealerAccept": "Akzeptieren"
+  },
+  "potentialsDealer": {
+    "potentialsDealer": "Potentielle Händler",
+    "dealers": "Händler",
+    "communication": "Kommunikation",
+    "dealerDirectory": "Händlerverzeichnis",
+    "manageYourPotentialDealerRelationships": "Verwalten Sie Ihre Beziehungen zu potenziellen Händlern",
+    "addDealer": "Händler hinzufügen",
+    "seeDetails": "Details ansehen",
+    "makeDealer": "Zum Händler machen",
+    "recentCommunications": "Letzte Kommunikationen",
+    "latestDealerInteractions": "Letzte Händlerinteraktionen",
+    "dddCommunicationLog": "Kommunikationsprotokoll hinzufügen"
+  },
+  "deals": {
+    "allDeals": "Alle Angebote",
+    "dealApproval": "Angebotsgenehmigung",
+    "changeRequest": "Änderungsanfrage",
+    "createNewDeal": "Neues Angebot erstellen",
+    "edit": "Bearbeiten",
+    "reject": "Ablehnen",
+    "approve": "Genehmigen",
+    "dealAnalytics": "Angebotsanalysen",
+    "successRate": "Erfolgsrate",
+    "valueSaved": "Gespeicherter Wert",
+    "redemptions": "Einlösungen",
+    "totalDeals": "Gesamte Angebote",
+    "mostPopularDealTypes": "Am beliebtesten Angebotstypen",
+    "redemptionTrends": "Einlösungsverhalten"
+  },
+  "cities": {
+    "cities": "Städte",
+    "addNewCity": "Neue Stadt hinzufügen"
+  },
+  "subscription": {
+    "subscriptions": "Abonnement",
+    "createSubscriptionPlan": "Abonnementplan erstellen",
+    "monthly": "Monatlich ",
+    "yearly": "Jahres "
+  },
+  "earning": {
+    "earning": "Verdienst",
+    "todaysEarning": "Heutiger Verdienst",
+    "allEarnings": "Alle Einnahmen"
+  },
+  "promotions": {
+    "promotions": "Promotionen",
+    "addNewPromotion": "Neue Promotion hinzufügen"
+  },
+  "employees": {
+    "employees": "Mitarbeiter",
+    "addNewEmployee": "Neuen Mitarbeiter hinzufügen"
+  },
+  "profile": {
+    "profileInformation": "Profil informationen",
+    "editProfile": "Profil bearbeiten",
+    "changePassword": "Passwort ändern",
+    "privacyPolicy": "Datenschutz-Bestimmungen",
+    "termsAndPolicies": "Geschäftsbedingungen & Richtlinien"
+  },
   "language": {
     "en": "English",
     "fr": "Français"

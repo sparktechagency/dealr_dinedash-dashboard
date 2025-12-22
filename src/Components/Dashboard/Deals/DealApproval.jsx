@@ -9,8 +9,11 @@ import {
 import { useState } from "react";
 import SpinLoader from "../../UI/SpinLoader";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
+import { useTranslation } from "react-i18next";
 
 const DealApproval = ({ setEditDealsModalOpen, setCurrentRecord }) => {
+  const { t } = useTranslation();
+
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -119,19 +122,19 @@ const DealApproval = ({ setEditDealsModalOpen, setCurrentRecord }) => {
                   }}
                   className="bg-[#185DDE] h-10 rounded-2xl hover:!bg-[#185ddea3] !text-white"
                 >
-                  Edit
+                  {t("deals.edit")}
                 </Button>
                 <Button
                   onClick={() => handleApprove(item?._id)}
                   className="bg-[#16A34A] h-10 rounded-2xl hover:!bg-[#16a34a90] !text-white"
                 >
-                  Approve
+                  {t("deals.approve")}
                 </Button>
                 <Button
                   onClick={() => handleDecline(item?._id)}
                   className="bg-[#DC2626] h-10 rounded-2xl hover:!bg-[#dc262690] !text-white"
                 >
-                  Reject
+                  {t("deals.reject")}
                 </Button>
               </div>
             </div>

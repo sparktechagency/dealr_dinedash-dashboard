@@ -58,6 +58,72 @@
     "selectRegion": "Select Region",
     "selectPostCode": "Select Post Code"
   },
+  "dealersList": {
+    "dealersList": "Dealers List",
+    "deals_redeemed_per_Dealer": "Deals redeemed per Dealer"
+  },
+  "dealerRequest": {
+    "dealerRequests": "Dealer Requests",
+    "dealerRequestDetails": "Dealer Request Details",
+    "dealerDelete": "Delete",
+    "dealerAccept": "Accept"
+  },
+  "potentialsDealer": {
+    "potentialsDealer": "Potentials Dealers",
+    "dealers": "Dealers",
+    "communication": "Communications",
+    "dealerDirectory": "Dealer Directory",
+    "manageYourPotentialDealerRelationships": "Manage your potential dealer relationships",
+    "seeDetails": "See Details",
+    "makeDealer": "Make Dealer",
+    "dddCommunicationLog": "Add Communication Log"
+  },
+  "deals": {
+    "allDeals": "All Deals",
+    "dealApproval": "Deal Approval",
+    "changeRequest": "Change Request",
+    "createNewDeal": "Create New Deal",
+    "edit": "Edit",
+    "reject": "Reject",
+    "approve": "Approve",
+    "dealAnalytics": "Deal Analytics",
+    "successRate": "Success Rate",
+    "valueSaved": "Value Saved",
+    "redemptions": "Redemptions",
+    "totalDeals": "Total Deals",
+    "mostPopularDealTypes": "Most Popular Deal Types",
+    "redemptionTrends": "Redemption Trends"
+  },
+  "cities": {
+    "cities": "Cities",
+    "addNewCity": "Add New City"
+  },
+  "subscription": {
+    "subscriptions": "Subscriptions",
+    "createSubscriptionPlan": "Create Subscription Plan",
+    "monthly": "Monthly ",
+    "yearly": "Yearly "
+  },
+  "earning": {
+    "earning": "Earning",
+    "todaysEarning": "Today's Earning",
+    "allEarnings": "All Earnings"
+  },
+  "promotions": {
+    "promotions": "Promotions",
+    "addNewPromotion": "Add New Promotion"
+  },
+  "employees": {
+    "employees": "Employees",
+    "addNewEmployee": "Add New Employee"
+  },
+  "profile": {
+    "profileInformation": "Profile Information",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "privacyPolicy": "Privacy Policy",
+    "termsAndPolicies": "Terms & Policies"
+  },
   "language": {
     "en": "English",
     "fr": "Français"

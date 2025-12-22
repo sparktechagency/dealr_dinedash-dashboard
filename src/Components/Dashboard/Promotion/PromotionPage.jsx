@@ -9,8 +9,11 @@ import EditPromotion from "./EditPromotion";
 import DeletePromotion from "./DeletePromotion";
 import { useGetPromotionQuery } from "../../../Redux/api/promotion/promotionApi";
 import { baseUrl } from "../../../constant/baseUrl";
+import { useTranslation } from "react-i18next";
 
 const PromotionPage = () => {
+  const { t } = useTranslation();
+
   const [page, setPage] = useState(1);
   const limit = 10;
   const { data, isFetching } = useGetPromotionQuery({ page, limit });
@@ -117,14 +120,14 @@ const PromotionPage = () => {
   ];
 
   return (
-    <PageWrapper pageTitle="Promotion" isSearch={false}>
+    <PageWrapper pageTitle={t("promotions.promotions")} isSearch={false}>
       <div className="py-6">
         <Button
           onClick={() => setAddPromotionModal(true)}
           className="w-full h-10 rounded-lg bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
         >
           <HiOutlinePlusCircle className="text-xl" />
-          Add Promotion
+          {t("promotions.addNewPromotion")}
         </Button>
       </div>
 

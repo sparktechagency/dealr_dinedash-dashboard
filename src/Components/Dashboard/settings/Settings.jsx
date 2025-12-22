@@ -1,14 +1,15 @@
 import { RightOutlined } from "@ant-design/icons";
 import { Divider, List } from "antd";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const data = [
-  { title: "Change Password", to: "/admin/change-password" },
-  { title: "Privacy Policy", to: "/admin/privacy-policy" },
-  { title: "Terms & Policies", to: "/admin/terms-of-service" },
-];
-
 const Settings = () => {
+  const { t } = useTranslation();
+  const data = [
+    { title: t("profile.changePassword"), to: "/admin/change-password" },
+    { title: t("profile.privacyPolicy"), to: "/admin/privacy-policy" },
+    { title: t("profile.termsAndPolicies"), to: "/admin/terms-of-service" },
+  ];
   return (
     <div className="lg:w-[90%] w-full">
       <List

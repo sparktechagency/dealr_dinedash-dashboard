@@ -11,8 +11,11 @@ import DeleteEmployee from "./DeleteEmployee";
 import ViewEmployee from "./ViewEmployee";
 import { baseUrl } from "../../../constant/baseUrl";
 import { useGetEmployeeQuery } from "../../../Redux/api/employee/employeeApi";
+import { useTranslation } from "react-i18next";
 
 const Employee = () => {
+  const { t } = useTranslation();
+
   const serverUrl = baseUrl;
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -145,14 +148,14 @@ const Employee = () => {
   ];
 
   return (
-    <PageWrapper isSearch={false} pageTitle="Employees">
+    <PageWrapper isSearch={false} pageTitle={t("employees.employees")}>
       <div className="py-6">
         <Button
           onClick={() => setEmployeeModalOpen(true)}
           className="w-full h-10 rounded-lg bg-[#185DDE] hover:!bg-[#185DDE] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
         >
           <HiOutlinePlusCircle className="text-xl" />
-          Add Employee
+          {t("employees.addNewEmployee")}
         </Button>
       </div>
 

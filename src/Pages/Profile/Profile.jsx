@@ -10,8 +10,11 @@ import { AllImages } from "../../../public/images/AllImages";
 import Spinner from "../../Components/Shared/Spinner";
 import { useGetMyProfileQuery } from "../../Redux/api/user/userApi";
 import { baseUrl } from "../../constant/baseUrl";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
+
   const serverUrl = baseUrl;
   const { data: myProfile, isFetching } = useGetMyProfileQuery({});
   const myProfileData = myProfile?.data?.attributes?.[0];
@@ -36,7 +39,7 @@ const Profile = () => {
             onClick={() => navigate(-1)}
           />
           <h2 className="text-black text-2xl font-semibold">
-            Profile Information
+            {t("profile.profileInformation")}
           </h2>
         </div>
         <Button
@@ -44,7 +47,7 @@ const Profile = () => {
           onClick={handleEditClick}
           className=" h-11 rounded-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium px-8"
         >
-          Edit Profile
+          {t("profile.editProfile")}
         </Button>
       </div>
       <div className="bg-[#B7CDF5] rounded-lg shadow-lg p-6 border-2 border-[#185DDE]">

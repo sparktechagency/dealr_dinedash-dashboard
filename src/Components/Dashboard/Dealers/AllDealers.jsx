@@ -11,11 +11,13 @@ import DealerViewModal from "./DealerViewModal";
 import { useGetAllUsersQuery } from "../../../Redux/api/user/userApi";
 import DealerUnblockModal from "./DealerUnblockModal";
 import { useMostPopularDealsQuery } from "../../../Redux/api/deals/dealsApi";
+import { useTranslation } from "react-i18next";
 
 const AllDealers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
+  const { t } = useTranslation();
 
   const { data: popularDeals, isFetching: isFetchingDeals } =
     useMostPopularDealsQuery({});
@@ -50,7 +52,7 @@ const AllDealers = () => {
     <PageWrapper
       searchText={searchText}
       onSearch={onSearch}
-      pageTitle="Dealers List"
+      pageTitle={t("dealersList.dealersList")}
     >
       <div
         style={{
@@ -60,7 +62,7 @@ const AllDealers = () => {
       >
         <div className="flex items-center justify-between">
           <p className="text-[#185DDE] font-semibold text-xl">
-            Deals redeemed per Dealer
+            {t("dealersList.deals_redeemed_per_Dealer")}
           </p>
           {/* <div className="space-y-2">
             <p className="font-medium">Short by Performance:</p>

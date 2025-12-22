@@ -10,8 +10,11 @@ import SpinLoader from "../../UI/SpinLoader";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 import { baseUrl } from "../../../constant/baseUrl";
 import { formatDate } from "../../../utils/dateFormet";
+import { useTranslation } from "react-i18next";
 
 const ChangeRequest = () => {
+  const { t } = useTranslation();
+
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -173,7 +176,7 @@ const ChangeRequest = () => {
                         strokeLinejoin="round"
                       />
                     </svg>{" "}
-                    Approve
+                    {t("deals.approve")}
                   </Button>
 
                   <Button
@@ -201,7 +204,7 @@ const ChangeRequest = () => {
                         fill="#F3F3F3"
                       />
                     </svg>{" "}
-                    Reject
+                    {t("deals.reject")}
                   </Button>
                 </div>
               </div>

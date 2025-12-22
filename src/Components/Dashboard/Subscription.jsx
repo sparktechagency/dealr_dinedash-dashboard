@@ -26,10 +26,13 @@ import DeleteSubscriptionModal from "../UI/DeleteSubscriptionModal";
 import EditSubscriptionModal from "../UI/EditSubscriptionModal";
 import PageWrapper from "../UI/PageWrapper";
 import tryCatchWrapper from "../../utils/tryCatchWrapper";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
 export default function Subscription() {
+  const { t } = useTranslation();
+
   const [toggleSubscriptionStatus] = useToggleSubscriptionStatusMutation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -133,7 +136,7 @@ export default function Subscription() {
   if (isFetching) return <Spinner size="large" />;
 
   return (
-    <PageWrapper isSearch={false} pageTitle="Subscription Plan">
+    <PageWrapper isSearch={false} pageTitle={t("subscription.subscriptions")}>
       <div className="mt-6">
         {/* Create Subscription Button */}
         <div className="w-[95%] mx-auto">
@@ -143,7 +146,9 @@ export default function Subscription() {
             className="w-full h-12 rounded-xl bg-[#185DDE] hover:!bg-[#185DDEba] transition-colors duration-300 border-none !text-white hover:!border-none font-medium"
           >
             <FiEdit3 className="text-2xl text-primary-color" />
-            <p className="text-xs sm:text-xl py-3">Create Subscription Plan</p>
+            <p className="text-xs sm:text-xl py-3">
+              {t("subscription.createSubscriptionPlan")}
+            </p>
           </Button>
         </div>
 
@@ -166,7 +171,7 @@ export default function Subscription() {
                       borderRadius: "8px",
                     }}
                   >
-                    Monthly
+                    {t("subscription.monthly")}
                   </span>
                 ),
               },
@@ -182,7 +187,7 @@ export default function Subscription() {
                       borderRadius: "8px",
                     }}
                   >
-                    Yearly
+                    {t("subscription.yearly")}
                   </span>
                 ),
               },

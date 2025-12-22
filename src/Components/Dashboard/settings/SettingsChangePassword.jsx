@@ -7,8 +7,11 @@ import { useChangePasswordMutation } from "../../../Redux/api/auth/authApi";
 import Spinner from "../../Shared/Spinner";
 import tryCatchWrapper from "../../../utils/tryCatchWrapper";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SettingsChangePassword = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [updatePassword, { isLoading }] = useChangePasswordMutation();
 
@@ -42,7 +45,7 @@ const SettingsChangePassword = () => {
           <p>
             <GoArrowLeft onClick={handleBack} className="cursor-pointer" />
           </p>
-          <p>Change Password</p>
+          <p>{t("profile.changePassword")}</p>
         </h1>
         <div className="w-full">
           <Form
