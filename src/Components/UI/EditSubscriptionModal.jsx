@@ -21,6 +21,7 @@ const EditSubscriptionModal = ({
     if (currentRecord) {
       form.setFieldsValue({
         planCategory: currentRecord.duration === 30 ? "monthly" : "yearly",
+        stripePriceId: currentRecord.stripePriceId,
         planName: currentRecord.planName,
         shortBio: currentRecord.description,
         planPrice: currentRecord.price,
@@ -53,6 +54,7 @@ const EditSubscriptionModal = ({
     form.validateFields().then((values) => {
       const updatedSubscription = {
         planName: values.planName,
+        stripePriceId: values.stripePriceId,
         description: values.shortBio,
         feature: facilities,
         price: Number(values.planPrice),
@@ -104,7 +106,16 @@ const EditSubscriptionModal = ({
             <Option value="yearly">Yearly</Option>
           </Select>
         </Form.Item>
-
+        <Form.Item
+          label="Stripe Price ID"
+          name="stripePriceId"
+          style={{ fontWeight: 500, margin: "15px 0px" }}
+        >
+          <Input
+            placeholder="Enter Stripe Price ID"
+            className="px-4 py-3 rounded-xl border-gray-300 hover:border-[#185DDE] focus:border-[#185DDE] focus:outline-none bg-transparent"
+          />
+        </Form.Item>
         {/* Plan Name */}
         <Form.Item
           label="Plan Name"

@@ -38,6 +38,7 @@ import CategoryProtectedRoute from "./CategoryProtectedRoute"; // new wrapper
 import Cookies from "js-cookie";
 import { decodedToken } from "../../utils/jwt";
 import PromotionPage from "../Dashboard/Promotion/PromotionPage";
+import DealType from "../Dashboard/DealType/DealTypePage";
 
 const token = Cookies.get("dealr_accessToken");
 const currentUser = decodedToken(token);
@@ -174,6 +175,14 @@ const router = createBrowserRouter([
                 routeName="deals-analytics"
               >
                 <DealAnalytics />
+              </CategoryProtectedRoute>
+            ),
+          },
+          {
+            path: "dealType",
+            element: (
+              <CategoryProtectedRoute user={currentUser} routeName="dealType">
+                <DealType />
               </CategoryProtectedRoute>
             ),
           },

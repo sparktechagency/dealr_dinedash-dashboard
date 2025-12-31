@@ -98,6 +98,7 @@ export default function Subscription() {
     form.validateFields().then((values) => {
       const newSubscription = {
         planName: values.planName,
+        stripePriceId: values.stripePriceId,
         description: values.shortBio, // mapped to description
         feature: facilities, // mapped to feature array
         price: Number(values.planPrice),
@@ -153,7 +154,7 @@ export default function Subscription() {
         </div>
 
         {/* Tabs */}
-        <div className="w-[95%] mx-auto mt-4">
+        {/* <div className="w-[95%] mx-auto mt-4">
           <Tabs
             defaultActiveKey="1"
             size="large"
@@ -193,7 +194,7 @@ export default function Subscription() {
               },
             ]}
           />
-        </div>
+        </div> */}
 
         {/* Add Modal */}
         <Modal
@@ -222,6 +223,16 @@ export default function Subscription() {
               </Select>
             </Form.Item>
 
+            <Form.Item
+              label="Stripe Price ID"
+              name="stripePriceId"
+              style={{ fontWeight: 500, margin: "15px 0px" }}
+            >
+              <Input
+                placeholder="Enter Stripe Price ID"
+                className="px-4 py-3 rounded-xl border-gray-300 hover:border-[#185DDE] focus:border-[#185DDE] focus:outline-none bg-transparent"
+              />
+            </Form.Item>
             <Form.Item
               label="Plan Name"
               name="planName"
@@ -312,7 +323,7 @@ export default function Subscription() {
 
         {/* Subscription Cards */}
         <div className="flex flex-wrap items-center justify-center gap-6 mt-6">
-          {filteredSubscriptions.map((sub) => (
+          {subscriptionList.map((sub) => (
             <Card
               key={sub._id}
               style={{ width: "100%", maxWidth: 350, padding: 0 }}

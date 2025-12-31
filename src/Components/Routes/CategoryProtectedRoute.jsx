@@ -11,7 +11,7 @@ export const categoryRoutesMap = {
     "dealer-request",
     "potentials_dealer",
   ],
-  deals: ["all-deals", "deals-analytics"],
+  deals: ["all-deals", "deals-analytics", "dealType"],
   cities: ["cities", "region"],
   subscription: ["subscription", "earning"],
 };

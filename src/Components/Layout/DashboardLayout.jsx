@@ -165,6 +165,23 @@ const DashboardLayout = () => {
       ],
     },
     {
+      key: "dealType",
+      icon: (
+        <img
+          src={category}
+          alt="dealType"
+          width={16}
+          height={16}
+          style={{
+            filter: location.pathname.includes("dealType")
+              ? "brightness(0) invert(1)"
+              : undefined,
+          }}
+        />
+      ),
+      label: <NavLink to="dealType">{t("sidebar.dealType")}</NavLink>,
+    },
+    {
       key: "cities",
       icon: (
         <img
