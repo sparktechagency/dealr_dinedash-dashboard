@@ -23,7 +23,7 @@ const DeleteDealType = ({ deleteModal, handleCancel, currentRecord }) => {
     <Modal open={deleteModal} onCancel={handleCancel} footer={null} width={450}>
       <div className="mt-8">
         <p className="text-2xl font-medium text-center">
-          Do you want to Delete this Employee?
+          Do you want to Delete this?
         </p>
         <div className="flex gap-10 px-8 mt-6">
           {/* Cancel Button */}
