@@ -25,10 +25,13 @@ const DealerRequest = () => {
 
   const navigate = useNavigate();
 
-  const { data, isFetching } = useAllDealerRequestQuery({
-    page: currentPage,
-    limit: pageSize,
-  });
+  const { data, isFetching } = useAllDealerRequestQuery(
+    {
+      page: currentPage,
+      limit: pageSize,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
   const allReq = data?.data?.attributes?.users || [];
   const totalReq = data?.data?.attributes?.pagination?.totalResults || 0;
 

@@ -5,6 +5,7 @@ import { baseUrl } from "../../../constant/baseUrl";
 import { formatDate } from "../../../utils/dateFormet";
 import { useGetSpacificUserQuery } from "../../../Redux/api/user/userApi";
 import SpinLoader from "../../UI/SpinLoader";
+import DealersAllComunicationTable from "../PotentialsDealer/DealersAllComunicationTable";
 
 const { Title, Text } = Typography;
 
@@ -28,7 +29,7 @@ const DealerViewModal = ({
         open={isViewModalOpen}
         onCancel={handleCancel}
         footer={null}
-        width={450}
+        className="!w-[95%] lg:!w-[800px]"
         style={{ top: 100 }}
       >
         {isFetching ? (
@@ -82,7 +83,17 @@ const DealerViewModal = ({
                 <Text>{formatDate(currentRecord?.createdAt)}</Text>
               </div>
             </div>
-
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold mb-4">All Communication</h2>
+              <DealersAllComunicationTable
+                data={userData?.communications}
+                loading={isFetching}
+                setPage={() => {}}
+                page={1}
+                total={userData?.communications?.length}
+                limit={10}
+              />
+            </div>
             <div className="">
               <Button
                 onClick={() => {

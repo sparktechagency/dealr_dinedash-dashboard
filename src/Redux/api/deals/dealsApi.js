@@ -22,13 +22,15 @@ const dealsApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.city],
     }),
     allApprovedDeal: build.query({
-      query: ({ page, limit }) => {
+      query: ({ page, limit, name, city }) => {
         return {
           url: `/deal/all-approved`,
           method: "GET",
           params: {
             page,
             limit,
+            name,
+            city,
           },
         };
       },
@@ -62,18 +64,21 @@ const dealsApi = baseApi.injectEndpoints({
     deleteDeal: build.mutation({
       query: (req) => ({
         url: `/deal/deleteby-admin/${req?.params}`,
-        method: "DELETE",
+        method: "PUT",
+        body: req?.body,
       }),
       invalidatesTags: [tagTypes.city],
     }),
     allPendingDeal: build.query({
-      query: ({ page, limit }) => {
+      query: ({ page, limit, name, city }) => {
         return {
           url: `/deal/pending-deals`,
           method: "GET",
           params: {
             page,
             limit,
+            name,
+            city,
           },
         };
       },
@@ -94,13 +99,15 @@ const dealsApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.city],
     }),
     allChangeRequest: build.query({
-      query: ({ page, limit }) => {
+      query: ({ page, limit, name, city }) => {
         return {
           url: `/deal/all-change-req`,
           method: "GET",
           params: {
             page,
             limit,
+            name,
+            city,
           },
         };
       },

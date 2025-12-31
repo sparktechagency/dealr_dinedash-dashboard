@@ -53,6 +53,7 @@ const AllDeals = () => {
       ),
       children: (
         <>
+          {" "}
           <AllDealsTab
             handleCancel={handleCancel}
             isDealAddModalOpen={isDealAddModalOpen}
@@ -62,18 +63,15 @@ const AllDeals = () => {
             deleteDealsModalOpen={deleteDealsModalOpen}
             setCurrentRecord={setCurrentRecord}
           />
-
           <CreateDealModal
             isDealAddModalOpen={isDealAddModalOpen}
             handleCancel={handleCancel}
           />
-
           <EditDealModal
             editDealsModalOpen={editDealsModalOpen}
             handleCancel={handleCancel}
             currentRecord={currentRecord}
           />
-
           <DeleteDealsModal
             deleteDealsModalOpen={deleteDealsModalOpen}
             handleCancel={handleCancel}
@@ -145,7 +143,7 @@ const AllDeals = () => {
   ];
 
   return (
-    <PageWrapper pageTitle={t("deals.allDeals")}>
+    <PageWrapper pageTitle={t("deals.allDeals")} isSearch={false}>
       <div className="relative">
         <div className="tabs-wrapper py-5">
           <ConfigProvider
